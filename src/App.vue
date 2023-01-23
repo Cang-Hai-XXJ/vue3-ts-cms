@@ -7,6 +7,7 @@
 import { defineComponent } from 'vue'
 
 import HelloWorld from './components/HelloWorld.vue'
+console.log('test')
 
 export default defineComponent({
   name: 'App',
