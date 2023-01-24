@@ -1,8 +1,11 @@
 <template>
   <div id="app">
+    <div>{{ $store.state.name }}</div>
     <router-link to="/login">登录</router-link>
     <router-link to="/main">首页</router-link>
     <router-view></router-view>
+    <el-button>deme</el-button>
+    <el-button type="danger">deme</el-button>
   </div>
 </template>
 
