@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, defineExpose } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 const ruleFormRef = ref<FormInstance>()
 const phone = reactive({
@@ -43,6 +43,12 @@ const rules = reactive<FormRules>({
       message: '请输入4位数的验证码~'
     }
   ]
+})
+const loginAction = () => {
+  console.log('手机登录', phone.num, phone.code)
+}
+defineExpose({
+  loginAction
 })
 </script>
 

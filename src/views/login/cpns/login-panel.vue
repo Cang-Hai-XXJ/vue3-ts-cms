@@ -1,8 +1,8 @@
 <template>
   <div class="login-panel">
     <h2 class="title">后台管理系统</h2>
-    <el-tabs type="border-card" class="demo-tabs" stretch>
-      <el-tab-pane>
+    <el-tabs type="border-card" class="demo-tabs" stretch v-model="currentTab">
+      <el-tab-pane name="account">
         <template #label>
           <span class="custom-tabs-label">
             <el-icon><Avatar /></el-icon>
@@ -11,14 +11,14 @@
         </template>
         <account-login ref="accountLoginRef" />
       </el-tab-pane>
-      <el-tab-pane>
+      <el-tab-pane name="phone">
         <template #label>
           <span class="custom-tabs-label">
             <el-icon><Iphone /></el-icon>
             <span>手机号登录</span>
           </span>
         </template>
-        <phone-login />
+        <phone-login ref="phoneLoginRef" />
       </el-tab-pane>
     </el-tabs>
     <div class="account-control">
@@ -37,10 +37,16 @@ import phoneLogin from './phone-login.vue'
 import { ref } from 'vue'
 
 const isKeepPass = ref(true)
+const currentTab = ref('account')
 const accountLoginRef = ref<InstanceType<typeof accountLogin>>()
+const phoneLoginRef = ref<InstanceType<typeof phoneLogin>>()
 
 const handleClickLogin = () => {
-  accountLoginRef.value?.loginAction(isKeepPass.value)
+  if (currentTab.value === 'account') {
+    accountLoginRef.value?.loginAction(isKeepPass.value)
+  } else {
+    phoneLoginRef.value?.loginAction()
+  }
 }
 </script>
 

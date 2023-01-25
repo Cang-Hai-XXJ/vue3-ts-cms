@@ -1,8 +1,8 @@
 <template>
   <div class="account-login">
     <el-form :rules="rules" :model="user" ref="ruleFormRef">
-      <el-form-item label="账号" prop="account">
-        <el-input v-model="user.account" />
+      <el-form-item label="账号" prop="name">
+        <el-input v-model="user.name" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input v-model="user.password" show-password />
@@ -20,18 +20,18 @@ import localCache from '@/utils/localCache'
 
 const ruleFormRef = ref<FormInstance>()
 const user = reactive({
-  account: localCache.getCache('name') ?? '',
+  name: localCache.getCache('name') ?? '',
   password: localCache.getCache('pass') ?? ''
 })
 const rules = reactive<FormRules>({
-  account: [
+  name: [
     {
       required: true,
       message: '请输入账号~'
     },
     {
-      pattern: /^[A-z0-9]{3,6}$/,
-      message: '请输入3到6位数的字母数字组合~'
+      pattern: /^[A-z0-9]{3,12}$/,
+      message: '请输入3到12位数的字母数字组合~'
     }
   ],
   password: [
@@ -54,7 +54,7 @@ const loginAction = (isKeepPass: boolean) => {
       //TODO 加密
 
       if (isKeepPass) {
-        localCache.setCache('name', user.account)
+        localCache.setCache('name', user.name)
         localCache.setCache('pass', user.password)
         store.dispatch('login/accountLoginAction', { ...user })
       } else {

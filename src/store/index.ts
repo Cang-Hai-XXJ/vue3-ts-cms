@@ -18,5 +18,8 @@ const store = createStore<IRootState>({
   }
 })
 
-store.state.name
+export function setupStore() {
+  store.dispatch('login/loadLocalLoginInfo')
+}
+
 export default store

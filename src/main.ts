@@ -10,8 +10,14 @@ import 'element-plus/dist/index.css'
 // import MYRequest from './service'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
-// MYRequest.request<DataType>({
-//   url: 'get'
+import { setupStore } from './store'
+
+// MYRequest.post({
+//   url: 'login',
+//   data: {
+//     name: 'coderwhy',
+//     password: '123456'
+//   }
 //   // isShowLoading: false
 // }).then((res) => {
 //   console.log('返回数据', res)
@@ -36,6 +42,7 @@ const app = createApp(App)
 app.use(router)
 app.use(store)
 app.use(ElementPLus)
+setupStore()
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
