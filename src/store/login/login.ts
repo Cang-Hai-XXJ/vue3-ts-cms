@@ -41,7 +41,7 @@ const loginModules: Module<ILoginState, IRootState> = {
 
       //2 获取用户信息
       const userInfoRes = await requestUserInfoById(id)
-      commit('changeUserInfo')
+      commit('changeUserInfo', userInfoRes)
       localCache.setCache('userInfo', userInfoRes)
 
       //3 获取角色权限对应的菜单
