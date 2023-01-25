@@ -9,7 +9,7 @@
             <span>账号登录</span>
           </span>
         </template>
-        <account-login />
+        <account-login ref="accountLoginRef" />
       </el-tab-pane>
       <el-tab-pane>
         <template #label>
@@ -25,7 +25,9 @@
       <el-checkbox v-model="isKeepPass">记住密码</el-checkbox>
       <el-link type="primary">忘记密码</el-link>
     </div>
-    <el-button class="login-btn" type="primary">立即登录</el-button>
+    <el-button class="login-btn" type="primary" @click="handleClickLogin"
+      >立即登录</el-button
+    >
   </div>
 </template>
 
@@ -33,7 +35,13 @@
 import accountLogin from './account-login.vue'
 import phoneLogin from './phone-login.vue'
 import { ref } from 'vue'
+
 const isKeepPass = ref(true)
+const accountLoginRef = ref<InstanceType<typeof accountLogin>>()
+
+const handleClickLogin = () => {
+  accountLoginRef.value?.loginAction(isKeepPass.value)
+}
 </script>
 
 <style lang="less" scoped>
