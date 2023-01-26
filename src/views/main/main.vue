@@ -18,6 +18,7 @@
 import { ref } from 'vue'
 import navMenu from '@/components/nav-menu'
 import navHeader from '@/components/nav-header'
+
 const isCollapse = ref(false)
 const handleFoldChange = (isFold: boolean) => {
   isCollapse.value = isFold
@@ -32,16 +33,13 @@ const handleFoldChange = (isFold: boolean) => {
   width: 100%;
   height: 100%;
 }
-
 .main-content,
 .page {
   height: 100%;
 }
-
 .page-content {
   height: calc(100% - 48px);
 }
-
 .el-header,
 .el-footer {
   display: flex;
@@ -49,11 +47,9 @@ const handleFoldChange = (isFold: boolean) => {
   text-align: center;
   align-items: center;
 }
-
 .el-header {
   height: 48px !important;
 }
-
 .el-aside {
   overflow-x: hidden;
   overflow-y: auto;
@@ -69,7 +65,6 @@ const handleFoldChange = (isFold: boolean) => {
     display: none;
   }
 }
-
 .el-main {
   color: #333;
   text-align: center;

@@ -1,31 +1,23 @@
 <template>
   <div class="nav-header">
-    <i
-      class="fold-menu"
-      :class="isFold ? 'el-icon-s-fold' : 'el-icon-s-unfold'"
-      @click="handleFoldClick"
-    ></i>
+    <i class="fold-menu" @click="handleFoldClick">
+      <el-icon>
+        <template v-if="isFold"><Fold /> </template>
+        <template v-else> <Expand /> </template>
+      </el-icon>
+    </i>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script lang="ts" setup>
+import { defineEmits, ref } from 'vue'
 
-export default defineComponent({
-  emits: ['foldChange'],
-  setup(props, { emit }) {
-    const isFold = ref(false)
-    const handleFoldClick = () => {
-      isFold.value = !isFold.value
-      emit('foldChange', isFold.value)
-    }
-
-    return {
-      isFold,
-      handleFoldClick
-    }
-  }
-})
+const emit = defineEmits(['foldChange'])
+const isFold = ref(false)
+const handleFoldClick = () => {
+  isFold.value = !isFold.value
+  emit('foldChange', isFold.value)
+}
 </script>
 
 <style scoped lang="less">
