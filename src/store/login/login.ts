@@ -10,6 +10,7 @@ import {
   requestMenusByRoleId
 } from '@/service/request/login/login'
 import localCache from '@/utils/localCache'
+import { mapMenus2Routes } from '@/utils/map-menus'
 
 const loginModules: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -29,6 +30,11 @@ const loginModules: Module<ILoginState, IRootState> = {
     },
     changeMenus(state, menus: any) {
       state.menus = menus
+      //获取到菜单后动态加载路由
+      const routes = mapMenus2Routes(menus)
+      for (const route of routes) {
+        router.addRoute('main', route)
+      }
     }
   },
   actions: {
