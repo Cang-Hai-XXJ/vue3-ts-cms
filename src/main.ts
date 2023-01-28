@@ -39,10 +39,11 @@ import { setupStore } from './store'
 // })
 const app = createApp(App)
 
+setupStore()
+
 app.use(router)
 app.use(store)
 app.use(ElementPLus)
-setupStore()
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
