@@ -1,9 +1,10 @@
 import { RouteRecordRaw } from 'vue-router'
+export let firstMenu: any = null
 
 export function mapMenus2Routes(menus: any): RouteRecordRaw[] {
   const routes: RouteRecordRaw[] = []
-
   const allRoutes: RouteRecordRaw[] = []
+
   //使用webpack的require解析main目录下的所有ts文件路径
   const routeFiles = require.context('@/router/main', true, /\.ts/)
   routeFiles.keys().forEach((key) => {
@@ -12,9 +13,12 @@ export function mapMenus2Routes(menus: any): RouteRecordRaw[] {
     allRoutes.push(route.default)
   })
 
-  function recurseSetRoute(menus: any) {
+  function _recurseSetRoute(menus: any) {
     for (const menu of menus) {
       if (menu.type === 2) {
+        if (!firstMenu) {
+          firstMenu = menu
+        }
         const route = allRoutes.find((route) => {
           return route.path === menu.url
         })
@@ -23,12 +27,25 @@ export function mapMenus2Routes(menus: any): RouteRecordRaw[] {
         }
       } else {
         if (menu.children?.length > 0) {
-          recurseSetRoute(menu.children)
+          _recurseSetRoute(menu.children)
         }
       }
     }
   }
-  recurseSetRoute(menus)
+  _recurseSetRoute(menus)
 
   return routes
+}
+
+export function pathMap2Menu(menus: any[], path: string): any {
+  for (const menu of menus) {
+    if (menu.type === 1) {
+      const findMenu = pathMap2Menu(menu.children ?? [], path)
+      if (findMenu) {
+        return findMenu
+      }
+    } else if (menu.type === 2 && menu.url === path) {
+      return menu
+    }
+  }
 }

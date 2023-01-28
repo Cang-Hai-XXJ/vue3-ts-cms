@@ -5,7 +5,7 @@
       <span v-if="!collapse" class="title">Vue3+TS</span>
     </div>
     <el-menu
-      default-active="2"
+      :default-active="defaultMenu"
       class="el-menu-vertical"
       :collapse="collapse"
       background-color="#0c2135"
@@ -26,7 +26,7 @@
             <template v-for="subitem in item.children" :key="subitem.id">
               <el-menu-item
                 :index="subitem.id + ''"
-                @click="handleClickMenuItem(subitem.url)"
+                @click="handleClickMenuItem(subitem)"
               >
                 <i v-if="subitem.icon" :class="subitem.icon"></i>
                 <span>{{ subitem.name }}</span>
@@ -47,15 +47,21 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, computed } from 'vue'
+import { defineProps, computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import router from '@/router'
 import { useStoreWithModules } from '@/store'
+import { pathMap2Menu } from '@/utils/map-menus'
 
 const store = useStoreWithModules()
 const userMenus = computed(() => store.state.login.menus)
-const handleClickMenuItem = (path: string) => {
+const route = useRoute()
+const menu = pathMap2Menu(userMenus.value, route.path)
+let defaultMenu = ref(menu.id + '')
+
+const handleClickMenuItem = (menu: any) => {
   router.push({
-    path: path ?? '/not-found'
+    path: menu.url ?? '/not-found'
   })
 }
 defineProps({
