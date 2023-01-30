@@ -14,10 +14,13 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, ref } from 'vue'
-import myBreadcrumb, { IBreadcrumb } from '@/base-ui/breadcrumb'
-import navUserInfo from './nav-user-info.vue'
+import { defineEmits, ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 
+import myBreadcrumb from '@/base-ui/breadcrumb'
+import navUserInfo from './nav-user-info.vue'
+import { pathMap2Breadcrumb } from '@/utils/map-menus'
+import { useStoreWithModules } from '@/store'
 const emit = defineEmits(['foldChange'])
 const isFold = ref(false)
 const handleFoldClick = () => {
@@ -25,7 +28,12 @@ const handleFoldClick = () => {
   emit('foldChange', isFold.value)
 }
 
-const breadcrumbs: IBreadcrumb[] = []
+//面包削
+const breadcrumbs = computed(() => {
+  const menus = useStoreWithModules().state.login.menus
+  const path = useRoute().path
+  return pathMap2Breadcrumb(menus, path)
+})
 </script>
 
 <style scoped lang="less">

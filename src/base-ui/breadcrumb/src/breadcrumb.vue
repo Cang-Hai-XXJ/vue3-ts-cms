@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import { defineProps, PropType } from 'vue'
-import { IBreadcrumb } from './types'
+import { IBreadcrumb } from '../index'
 defineProps({
   breadcrumbs: {
     type: Array as PropType<IBreadcrumb[]>,
