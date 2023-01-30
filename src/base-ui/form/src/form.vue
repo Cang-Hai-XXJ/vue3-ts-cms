@@ -13,12 +13,14 @@
                 v-if="item.type === 'input' || item.type === 'password'"
               >
                 <el-input
+                  v-model="formData[item.field]"
                   :placeholder="item.placeholder"
                   :show-password="item.type === 'password'"
                 />
               </template>
               <template v-else-if="item.type === 'select'">
                 <el-select
+                  v-model="formData[item.field]"
                   style="width: 100%"
                   :placeholder="item.placeholder"
                   v-bind="item.attrs"
@@ -33,6 +35,7 @@
               </template>
               <template v-else-if="item.type === 'datepicker'">
                 <el-date-picker
+                  v-model="formData[item.field]"
                   style="width: 100%"
                   :placeholder="item.placeholder"
                   v-bind="item.attrs"
@@ -47,9 +50,14 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, PropType } from 'vue'
+import { defineProps, defineEmits, PropType, reactive, watch } from 'vue'
 import { IFormItem } from '../types'
-defineProps({
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({}),
+    require: true
+  },
   formItems: {
     type: Array as PropType<IFormItem[]>,
     default: () => []
@@ -75,6 +83,17 @@ defineProps({
     })
   }
 })
+const emit = defineEmits(['update:modelValue'])
+const formData = reactive({ ...props.modelValue })
+
+watch(
+  formData,
+  (newValue) => {
+    console.log('v-model更新')
+    emit('update:modelValue', newValue)
+  },
+  { deep: true }
+)
 </script>
 
 <style lang="less" scoped>
