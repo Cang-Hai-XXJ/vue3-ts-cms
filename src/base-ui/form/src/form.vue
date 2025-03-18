@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, defineEmits, PropType, reactive, watch } from 'vue'
+import { PropType, reactive, watch } from 'vue'
 import { IFormItem } from '../types'
 const props = defineProps({
   modelValue: {

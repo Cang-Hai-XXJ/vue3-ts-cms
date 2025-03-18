@@ -18,7 +18,48 @@ const loginModules: Module<ILoginState, IRootState> = {
     return {
       token: '',
       userInfo: {},
-      menus: []
+      menus: [
+        {
+          name: '报告',
+          type: 2,
+          id: 1,
+          icon: 'Clock',
+          url: '/main/index',
+          sort: 1
+        },
+        {
+          name: '指数查询',
+          type: 2,
+          id: 2,
+          icon: 'TrendCharts',
+          url: '/main/queryIndex',
+          sort: 1
+        },
+        {
+          name: '工具',
+          type: 2,
+          id: 3,
+          icon: 'Tools',
+          url: '/analysis',
+          sort: 2
+        },
+        {
+          name: '设置',
+          type: 3,
+          id: 3,
+          icon: 'Setting',
+          url: '/setting',
+          sort: -1
+        },
+        {
+          name: '帮助中心',
+          type: 3,
+          id: 4,
+          icon: 'QuestionFilled',
+          url: '/help',
+          sort: -2
+        }
+      ]
     }
   },
   mutations: {
@@ -52,6 +93,13 @@ const loginModules: Module<ILoginState, IRootState> = {
 
       //3 获取角色权限对应的菜单
       const menus = await requestMenusByRoleId(userInfoRes.role.id)
+      // const menus = [
+      //   {
+      //     name: '报告',
+      //     type: 2,
+      //     url: ''
+      //   }
+      // ]
       commit('changeMenus', menus)
       localCache.setCache('menus', menus)
 

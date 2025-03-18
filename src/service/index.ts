@@ -7,7 +7,7 @@ const request = new MYRequest({
   timeout: TIME_OUT,
   interceptors: {
     //携带token
-    requestInterceptor: (config) => {
+    requestInterceptor: (config: any) => {
       const token = localCache.getCache('token')
       if (token) {
         config.headers.Authorization = `Bearer ${token}`

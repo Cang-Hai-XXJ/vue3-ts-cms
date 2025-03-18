@@ -31,14 +31,14 @@ class MYRequest {
     this.isShowLoading = config.isShowLoading ?? LOADING_STATE
 
     // 单个实例的拦截器
-    this.instance.interceptors.request.use(
-      this.interceptors?.requestInterceptor,
-      this.interceptors?.requestInterceptorCatch
-    )
-    this.instance.interceptors.response.use(
-      this.interceptors?.responseInterceptor,
-      this.interceptors?.responseInterceptorCatch
-    )
+    // this.instance.interceptors.request.use(
+    //   this.interceptors?.requestInterceptor,
+    //   this.interceptors?.requestInterceptorCatch
+    // )
+    // this.instance.interceptors.response.use(
+    //   this.interceptors?.responseInterceptor,
+    //   this.interceptors?.responseInterceptorCatch
+    // )
 
     // 所有实例的拦截器
     this.instance.interceptors.request.use(

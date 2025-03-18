@@ -3,9 +3,10 @@
     <el-container class="main-content">
       <el-aside :width="isCollapse ? '60px' : '210px'">
         <nav-menu :collapse="isCollapse" />
+        <nav-user :collapse="isCollapse" />
       </el-aside>
       <el-container class="page">
-        <el-header class="page-header">
+        <el-header v-show="isShowHeader" class="page-header">
           <nav-header @foldChange="handleFoldChange" />
         </el-header>
         <el-main class="page-content">
@@ -19,11 +20,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import navMenu from '@/components/nav-menu'
+import navUser from '@/components/nav-user'
 import navHeader from '@/components/nav-header'
+import { useRouter, useRoute } from 'vue-router'
+const router = useRouter()
+const route = useRoute()
+
+console.log(router, route.meta)
 
 const isCollapse = ref(false)
+const isShowHeader = computed(() => !router.currentRoute.value.meta.noHeader)
 const handleFoldChange = (isFold: boolean) => {
   isCollapse.value = isFold
 }
@@ -42,8 +50,11 @@ const handleFoldChange = (isFold: boolean) => {
   height: 100%;
 }
 .page-content {
-  height: calc(100% - 48px);
+  width: 100%;
+  height: 100%;
   .page-bg {
+    width: 100%;
+    height: 100%;
     background-color: #fff;
     border-radius: 5px;
   }
@@ -56,19 +67,20 @@ const handleFoldChange = (isFold: boolean) => {
   align-items: center;
 }
 .el-header {
-  height: 48px !important;
+  height: var(--header-height) !important;
 }
 .el-aside {
+  position: relative;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   line-height: 200px;
   text-align: left;
   cursor: pointer;
-  background-color: #001529;
+  background-color: #fff;
   transition: width 0.3s linear;
   scrollbar-width: none; /* firefox */
   -ms-overflow-style: none; /* IE 10+ */
-
+  border-right: 1px solid var(--border-color);
   &::-webkit-scrollbar {
     display: none;
   }
@@ -76,7 +88,7 @@ const handleFoldChange = (isFold: boolean) => {
 .el-main {
   color: #333;
   text-align: center;
-  // background-color: #f0f2f5;
-  background-color: aliceblue;
+  background-color: #fff;
+  padding: 0 !important;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div class="nav-header">
     <i class="fold-menu" @click="handleFoldClick">
+      <!-- 折叠面板 -->
       <el-icon>
         <template v-if="isFold"><Fold /> </template>
         <template v-else> <Expand /> </template>
@@ -14,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, ref, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import myBreadcrumb from '@/base-ui/breadcrumb'

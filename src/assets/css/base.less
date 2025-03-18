@@ -3,9 +3,35 @@ body {
   margin: 0;
 }
 
-html,body,#app {
+html,
+body,
+#app {
   width: 100%;
   height: 100%;
   user-select: none;
   font-size: 18px;
+  font-family: Inter;
+  box-sizing: border-box;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
+}
+
+:root {
+  --main-color: #4040E9;
+  --border-color: #f1f1f1;
+  --font-color: #4040F2;
+  --header-height: 70px;
+}
+
+.btn {
+  width: 100% !important;
+  height: 50px;
+  font-size: 18px;
+  border-radius: 3px !important;
+  color: #fff !important;
+  background: var(--main-color) !important;
 }
