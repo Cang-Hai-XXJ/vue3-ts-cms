@@ -1,6 +1,22 @@
 <template>
   <div class="queryIndex">
-    <section class="words">
+    <div class="tabs">
+      <div
+        class="tab"
+        :class="{ 'is-active': currTab === 1 }"
+        @click="clickTab(1)"
+      >
+        关键词实时动态
+      </div>
+      <div
+        class="tab"
+        :class="{ 'is-active': currTab === 2 }"
+        @click="clickTab(2)"
+      >
+        时下流行
+      </div>
+    </div>
+    <section v-show="currTab === 1" class="words">
       <div class="box" v-for="item of arr" :key="item">
         <div class="label">查询词组</div>
         <div class="content">{{ item }}</div>
@@ -43,7 +59,7 @@
         />
       </el-select>
     </section>
-    <section class="charts">
+    <section v-show="currTab === 1" class="charts">
       <div class="box">
         <div class="header">
           <div class="left">
@@ -57,7 +73,7 @@
         <div class="charts-content" id="hortTime"></div>
       </div>
     </section>
-    <section class="charts">
+    <section v-show="currTab === 1" class="charts">
       <div class="box">
         <div class="header">
           <div class="left">
@@ -91,7 +107,7 @@
         <div class="charts-content" id="hortMap"></div>
       </div>
     </section>
-    <section class="sort">
+    <section v-show="currTab === 1" class="sort">
       <div class="box">
         <div class="header">
           <div class="left">
@@ -177,18 +193,154 @@
         </div>
       </div>
     </section>
+    <section v-show="currTab === 2" class="table">
+      <el-table
+        ref="multipleTableRef"
+        :data="tableData"
+        row-key="id"
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+        :header-cell-style="{
+          backgroundColor: '#FAFAFA',
+          borderRadius: '15px 15px 0 0'
+        }"
+      >
+        <el-table-column type="selection" :selectable="selectable" width="55" />
+        <el-table-column
+          label="趋势（上次更新时间 3月10日14:24）"
+          min-width="280"
+        >
+          <template #default="scope">{{ scope.row.date }}</template>
+        </el-table-column>
+        <el-table-column property="name" label="搜索量" width="120" />
+        <el-table-column property="address" label="已开始" min-width="120" />
+        <el-table-column property="qq" label="趋势细分" min-width="220" />
+        <el-table-column property="ee" label="过去24小时" min-width="220" />
+      </el-table>
+    </section>
+    <section class="pagination">
+      <el-config-provider :locale="zhCn">
+        <el-pagination
+          v-model:current-page="currentPage4"
+          v-model:page-size="pageSize4"
+          :page-sizes="[10, 20, 30, 40]"
+          :size="size"
+          :disabled="disabled"
+          :background="background"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="400"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </el-config-provider>
+    </section>
   </div>
 </template>
 
 <script lang="ts" setup>
-import generatorPanel from '@/components/generator-panel'
-import introducePanelPanel from '@/components/introduce-panel'
 import { ref, reactive, onMounted } from 'vue'
 import * as echarts from 'echarts'
+import type { TableInstance } from 'element-plus'
+import type { ComponentSize } from 'element-plus'
+
+import generatorPanel from '@/components/generator-panel'
+import introducePanelPanel from '@/components/introduce-panel'
 import IconFilter from '../cpns/icon-filter.vue'
 import IconRank from '../cpns/icon-rank.vue'
+
 const value = ref('am')
 const value1 = ref('1')
+const currTab = ref(1)
+
+// 表格数据
+interface Goods {
+  id: number
+  date: string
+  name: string
+  address: string
+}
+
+const multipleTableRef = ref<TableInstance>()
+const multipleSelection = ref<Goods[]>([])
+
+const selectable = (row: Goods) => ![1, 2].includes(row.id)
+
+const handleSelectionChange = (val: Goods[]) => {
+  multipleSelection.value = val
+}
+
+const tableData: Goods[] = [
+  {
+    id: 1,
+    date: '2016-05-03',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  },
+  {
+    id: 2,
+    date: '2016-05-02',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  },
+  {
+    id: 3,
+    date: '2016-05-04',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  },
+  {
+    id: 4,
+    date: '2016-05-01',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  },
+  {
+    id: 5,
+    date: '2016-05-08',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  },
+  {
+    id: 6,
+    date: '2016-05-06',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  },
+  {
+    id: 7,
+    date: '2016-05-07',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  }
+]
+// 分页
+const currentPage4 = ref(4)
+const pageSize4 = ref(10)
+const size = ref<ComponentSize>('default')
+const background = ref(false)
+const disabled = ref(false)
+const handleSizeChange = (val: number) => {
+  console.log(`${val} items per page`)
+}
+const handleCurrentChange = (val: number) => {
+  console.log(`current page: ${val}`)
+}
+
+// 分页文案
+// 引入 ElConfigProvider 组件
+import { ElConfigProvider } from 'element-plus'
+// 引入中文包
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+// 更改分页文字
+// zhCn.el.pagination.total = '共 `{total} 条`';
+// zhCn.el.pagination.goto = '跳至';
+// zhCn.el.pagination.pagesize = '条/页';
+// zhCn.el.pagination.pageClassifier = '页';
+
+//
+const clickTab = (e: number) => {
+  currTab.value = e
+}
 const arr = ['Building block toy', 'Jigsaw puzzle']
 const arrSort = [
   {
@@ -296,6 +448,24 @@ onMounted(() => {
   text-align: start;
   section {
     margin: 30px 0;
+  }
+  .tabs {
+    height: 50px;
+    display: flex;
+    gap: 15px;
+    font-size: 18px;
+    .tab {
+      height: 48px;
+      line-height: 32px;
+      padding: 7px 20px;
+      border: 1px solid #eaecee;
+      border-radius: 22px;
+      text-align: center;
+    }
+    .is-active {
+      background: #f7f7fb;
+      font-weight: bold;
+    }
   }
   .options {
     display: flex;
@@ -475,6 +645,10 @@ onMounted(() => {
         }
       }
     }
+  }
+  .table {
+    border: 1px solid #eaecee;
+    // border-radius: 15px;
   }
 }
 </style>

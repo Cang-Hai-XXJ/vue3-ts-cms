@@ -56,8 +56,7 @@ const generate = () => {
   width: 80%;
   height: 300px;
   background: #fff;
-  padding: 36px;
-  margin-left: 20px;
+  padding: 0 36px;
 
   .title {
     font-family: Microsoft YaHei;
