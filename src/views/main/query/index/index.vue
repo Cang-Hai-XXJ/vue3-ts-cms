@@ -91,7 +91,7 @@
               热度随时间变化趋势
               <el-icon><QuestionFilled /></el-icon>
             </div>
-            <div class="right">
+            <div class="right cursor" @click="clickDownload">
               <el-icon><Download /></el-icon>
             </div>
           </div>
@@ -126,7 +126,9 @@
                   />
                 </el-select>
               </section>
-              <el-icon><Download /></el-icon>
+              <el-icon class="cursor" @click="clickDownload"
+                ><Download
+              /></el-icon>
             </div>
           </div>
           <div class="charts-content" id="hortMap"></div>
@@ -160,7 +162,9 @@
                   />
                 </el-select>
               </section>
-              <el-icon><Download /></el-icon>
+              <el-icon class="cursor" @click="clickDownload"
+                ><Download
+              /></el-icon>
             </div>
           </div>
           <div class="sort-content">
@@ -202,7 +206,9 @@
                   />
                 </el-select>
               </section>
-              <el-icon><Download /></el-icon>
+              <el-icon class="cursor" @click="clickDownload"
+                ><Download
+              /></el-icon>
             </div>
           </div>
           <div class="sort-content">
@@ -265,6 +271,12 @@
       </section>
     </div>
   </div>
+  <payPanel
+    v-model="isShowPayPanel"
+    title="订阅指数"
+    desc="获取深度市场洞察和独家报告，助您把握投资先机"
+    :radio-group="radioGroupList"
+  ></payPanel>
 </template>
 
 <script lang="ts" setup>
@@ -273,12 +285,16 @@ import * as echarts from 'echarts'
 import type { TableInstance } from 'element-plus'
 import type { ComponentSize } from 'element-plus'
 
-import generatorPanel from '@/components/generator-panel'
-import introducePanelPanel from '@/components/introduce-panel'
+import payPanel from '@/components/pay-panel/src/pay-panel.vue'
 import IconFilter from '../cpns/icon-filter.vue'
 import IconRank from '../cpns/icon-rank.vue'
 import formPage from '../cpns/form.vue'
+import { radioItem } from '@/components/pay-panel/src/type'
 
+const isShowPayPanel = ref(false)
+const clickDownload = () => {
+  isShowPayPanel.value = true
+}
 const isForm = ref(true)
 const toggle = (val: boolean) => {
   isForm.value = val
@@ -287,6 +303,73 @@ const value = ref('am')
 const value1 = ref('1')
 const currTab = ref(1)
 
+// 支付组件数据
+const radioGroupList: radioItem[] = [
+  {
+    title: '订阅方式',
+    radio: [
+      {
+        label: ['100次/月', '29.9'],
+        value: '1'
+      },
+      {
+        label: ['100次/月', '39.9'],
+        value: '2'
+      }
+    ]
+  },
+  {
+    title: '订阅渠道',
+    radio: [
+      {
+        label: '短信',
+        value: '1'
+      },
+      {
+        label: '公众号',
+        value: '2'
+      },
+      {
+        label: '小程序',
+        value: '3'
+      }
+    ]
+  },
+  {
+    title: '订阅阈值',
+    radio: [
+      {
+        label: '当超过基准值（5%）预警推送',
+        value: '1'
+      },
+      {
+        label: '当超过基准值（5%）预警推送',
+        value: '2'
+      }
+    ]
+  },
+  {
+    title: '推送频率设置',
+    radio: [
+      {
+        label: '每天',
+        value: '1'
+      },
+      {
+        label: '每周',
+        value: '2'
+      },
+      {
+        label: '每月',
+        value: '3'
+      },
+      {
+        label: '自定义',
+        value: '4'
+      }
+    ]
+  }
+]
 // 表格数据
 interface Goods {
   id: number
@@ -488,6 +571,9 @@ watchEffect(
   text-align: start;
   section {
     margin: 30px 0;
+  }
+  .cursor {
+    cursor: pointer;
   }
   .form-page {
     margin-top: 10px;

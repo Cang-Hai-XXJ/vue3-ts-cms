@@ -37,8 +37,8 @@
           </el-form-item>
           <el-form-item label="版本">
             <el-radio-group v-model="form.resource" class="radio-group">
-              <el-radio-button value="Sponsor">普通版</el-radio-button>
-              <el-radio-button value="Venue">高级版</el-radio-button>
+              <el-radio-button value="normal">普通版</el-radio-button>
+              <el-radio-button value="plus">高级版</el-radio-button>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="其他要求">
@@ -64,7 +64,11 @@
         </el-form>
       </div>
     </div>
-    <payPanel v-model="visible"></payPanel>
+    <payPanel
+      v-model="visible"
+      title="高级版本订单详情"
+      desc="高级版本，专属定制化报告，更详细全面的分析"
+    ></payPanel>
   </div>
 </template>
 
@@ -73,6 +77,7 @@ import { reactive, ref } from 'vue'
 import payPanel from '@/components/pay-panel'
 import router from '@/router'
 // do not use same name with ref
+
 const form = reactive({
   name: '',
   region: '',
@@ -88,7 +93,8 @@ const visible = ref(false)
 const paySuccess = ref(false)
 
 const onSubmit = () => {
-  paySuccess.value = true
+  visible.value = true
+  // paySuccess.value = true
 }
 const backHome = () => {
   paySuccess.value = false
@@ -97,119 +103,6 @@ const backHome = () => {
 </script>
 
 <style scoped lang="less">
-// 支付组件
-/deep/.el-dialog {
-  padding-left: 40px;
-  background: linear-gradient(180deg, #d8d8fe 0%, #ffffff 50%);
-  text-align: start;
-  padding-bottom: 50px;
-}
-.my-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 16px;
-  .diamond {
-    width: 40px;
-    height: 30px;
-    position: relative;
-    top: 20px;
-  }
-  .el-icon-close {
-    font-size: 30px;
-    color: rgb(128, 128, 128);
-  }
-}
-.titleClass {
-  font-family: Microsoft YaHei;
-  font-size: 20px;
-  font-weight: bold;
-  line-height: 36px;
-  margin-bottom: 10px;
-  color: #373f47;
-}
-.descClass {
-  font-family: PingFang HK;
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 24px;
-  color: #333333;
-}
-.payBox {
-  width: 100%;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  img {
-    width: 180px;
-    height: 180px;
-    border-radius: 3px;
-    background: #ffffff;
-    border: 1px solid #d4d4d4;
-    padding: 15px;
-  }
-  .contentClass {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: start;
-    p6 {
-      font-family: PingFang HK;
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 16px;
-      color: #333333;
-      span {
-        font-family: PingFang HK;
-        font-size: 26px;
-        font-weight: 600;
-        line-height: 26px;
-        color: #ff513a;
-        position: relative;
-        top: 3px;
-        margin-left: 5px;
-      }
-    }
-    p {
-      font-family: PingFang HK;
-      font-size: 14px;
-      font-weight: normal;
-      line-height: 24px;
-      color: #333333;
-      margin: 0;
-      margin-top: 5px;
-    }
-    .radio-group {
-      gap: 20px;
-      margin: 10px 0px 15px;
-      color: #000;
-      /deep/.el-radio-button__inner {
-        width: 113px;
-        height: 36px;
-        border-radius: 3px;
-        font-family: PingFang SC;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 18px;
-        text-align: center;
-        border: 1px solid #d4d4d4;
-        box-sizing: content-box;
-      }
-      /deep/.el-radio-button.is-active
-        .el-radio-button__original-radio:not(:disabled)
-        + .el-radio-button__inner {
-        background-color: #d8d8fe;
-        border-color: #4040f2;
-        color: #000;
-      }
-      /deep/.el-radio-button__inner:hover {
-        color: #4040f2;
-      }
-    }
-  }
-}
-
 .generate {
   position: relative;
   display: flex;
@@ -271,6 +164,7 @@ const backHome = () => {
       margin-bottom: 20px;
     }
     .content {
+      // FIXME
       .radio-group {
         gap: 20px;
         /deep/.el-radio-button__inner {
@@ -283,6 +177,7 @@ const backHome = () => {
           line-height: 18px;
           text-align: center;
           border: 1px solid #d4d4d4;
+          background-color: #fff;
           box-sizing: content-box;
         }
         /deep/.el-radio-button.is-active
