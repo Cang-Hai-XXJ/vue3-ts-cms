@@ -16,229 +16,259 @@
         时下流行
       </div>
     </div>
-    <section v-show="currTab === 1" class="words">
-      <div class="box" v-for="item of arr" :key="item">
-        <div class="label">查询词组</div>
-        <div class="content">{{ item }}</div>
-      </div>
-      <div class="box" @click="add">
-        <div class="add">+ 添加对比</div>
-      </div>
-    </section>
-    <section class="options">
-      <el-select
-        v-model="value"
-        placeholder="Select"
-        class="autoWidth"
-        :suffix-icon="IconRank"
-      >
-        <template #prefix>
-          {{ (options.find((item) => item.value === value) || {}).label }}
-        </template>
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-      <el-select
-        v-model="value1"
-        placeholder="Select"
-        class="autoWidth"
-        :suffix-icon="IconRank"
-      >
-        <template #prefix>
-          {{ (options1.find((item) => item.value === value) || {}).label }}
-        </template>
-        <el-option
-          v-for="item in options1"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </section>
-    <section v-show="currTab === 1" class="charts">
-      <div class="box">
-        <div class="header">
-          <div class="left">
-            热度随时间变化趋势
-            <el-icon><QuestionFilled /></el-icon>
-          </div>
-          <div class="right">
-            <el-icon><Download /></el-icon>
-          </div>
+
+    <div class="form-page" v-if="isForm && currTab === 1">
+      <formPage @toggle="toggle"></formPage>
+    </div>
+    <div v-else class="query-page">
+      <section v-show="currTab === 1" class="words">
+        <div class="box" v-for="item of arr" :key="item">
+          <div class="label">查询词组</div>
+          <div class="content">{{ item }}</div>
         </div>
-        <div class="charts-content" id="hortTime"></div>
-      </div>
-    </section>
-    <section v-show="currTab === 1" class="charts">
-      <div class="box">
-        <div class="header">
-          <div class="left">
-            搜索热度（按都市圈）
-            <el-icon><QuestionFilled /></el-icon>
-          </div>
-          <div class="right">
-            <section class="options">
-              <el-select
-                v-model="value"
-                class="autoWidth"
-                placeholder="Select"
-                :suffix-icon="IconFilter"
-              >
-                <template #prefix>
-                  {{
-                    (options.find((item) => item.value === value) || {}).label
-                  }}
-                </template>
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </section>
-            <el-icon><Download /></el-icon>
-          </div>
+        <div class="box" @click="add">
+          <div class="add">+ 添加对比</div>
         </div>
-        <div class="charts-content" id="hortMap"></div>
-      </div>
-    </section>
-    <section v-show="currTab === 1" class="sort">
-      <div class="box">
-        <div class="header">
-          <div class="left">
-            相关主题
-            <el-icon><QuestionFilled /></el-icon>
-          </div>
-          <div class="right">
-            <section class="options">
-              <el-select
-                v-model="value"
-                class="autoWidth"
-                placeholder="Select"
-                :suffix-icon="IconFilter"
-              >
-                <template #prefix>
-                  {{
-                    (options.find((item) => item.value === value) || {}).label
-                  }}
-                </template>
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </section>
-            <el-icon><Download /></el-icon>
-          </div>
+      </section>
+      <section class="options">
+        <div class="left">
+          <el-select
+            v-model="value"
+            placeholder="Select"
+            class="autoWidth"
+            :suffix-icon="IconRank"
+          >
+            <template #prefix>
+              {{ (options.find((item) => item.value === value) || {}).label }}
+            </template>
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <el-select
+            v-model="value1"
+            placeholder="Select"
+            class="autoWidth"
+            :suffix-icon="IconRank"
+          >
+            <template #prefix>
+              {{ (options1.find((item) => item.value === value) || {}).label }}
+            </template>
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </div>
-        <div class="sort-content">
-          <div class="item" v-for="(v, k) of arrSort" :key="k">
+        <div class="right">
+          <el-select
+            v-model="value"
+            placeholder="Select"
+            class="autoWidth"
+            :suffix-icon="IconRank"
+          >
+            <template #prefix>
+              {{ (options.find((item) => item.value === value) || {}).label }}
+            </template>
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+      </section>
+      <section v-show="currTab === 1" class="charts">
+        <div class="box">
+          <div class="header">
             <div class="left">
-              <span>{{ k + 1 }}</span> {{ v.label }}
+              热度随时间变化趋势
+              <el-icon><QuestionFilled /></el-icon>
             </div>
             <div class="right">
-              {{ v.value }}
-              <el-icon><MoreFilled /></el-icon>
+              <el-icon><Download /></el-icon>
             </div>
           </div>
+          <div class="charts-content" id="hortTime"></div>
         </div>
-      </div>
-      <div class="box">
-        <div class="header">
-          <div class="left">
-            相关查询
-            <el-icon><QuestionFilled /></el-icon>
-          </div>
-          <div class="right">
-            <section class="options">
-              <el-select
-                v-model="value"
-                class="autoWidth"
-                placeholder="Select"
-                :suffix-icon="IconFilter"
-              >
-                <template #prefix>
-                  {{
-                    (options.find((item) => item.value === value) || {}).label
-                  }}
-                </template>
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </section>
-            <el-icon><Download /></el-icon>
-          </div>
-        </div>
-        <div class="sort-content">
-          <div class="item" v-for="(v, k) of arrSort1" :key="k">
+      </section>
+      <section v-show="currTab === 1" class="charts">
+        <div class="box">
+          <div class="header">
             <div class="left">
-              <span>{{ k + 1 }}</span> {{ v.label }}
+              搜索热度（按都市圈）
+              <el-icon><QuestionFilled /></el-icon>
             </div>
             <div class="right">
-              {{ v.value }}
-              <el-icon><MoreFilled /></el-icon>
+              <section class="options">
+                <el-select
+                  v-model="value"
+                  class="autoWidth"
+                  placeholder="Select"
+                  :suffix-icon="IconFilter"
+                >
+                  <template #prefix>
+                    {{
+                      (options.find((item) => item.value === value) || {}).label
+                    }}
+                  </template>
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </section>
+              <el-icon><Download /></el-icon>
+            </div>
+          </div>
+          <div class="charts-content" id="hortMap"></div>
+        </div>
+      </section>
+      <section v-show="currTab === 1" class="sort">
+        <div class="box">
+          <div class="header">
+            <div class="left">
+              相关主题
+              <el-icon><QuestionFilled /></el-icon>
+            </div>
+            <div class="right">
+              <section class="options">
+                <el-select
+                  v-model="value"
+                  class="autoWidth"
+                  placeholder="Select"
+                  :suffix-icon="IconFilter"
+                >
+                  <template #prefix>
+                    {{
+                      (options.find((item) => item.value === value) || {}).label
+                    }}
+                  </template>
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </section>
+              <el-icon><Download /></el-icon>
+            </div>
+          </div>
+          <div class="sort-content">
+            <div class="item" v-for="(v, k) of arrSort" :key="k">
+              <div class="left">
+                <span>{{ k + 1 }}</span> {{ v.label }}
+              </div>
+              <div class="right">
+                {{ v.value }}
+                <el-icon><MoreFilled /></el-icon>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    <section v-show="currTab === 2" class="table">
-      <el-table
-        ref="multipleTableRef"
-        :data="tableData"
-        row-key="id"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-        :header-cell-style="{
-          backgroundColor: '#FAFAFA',
-          borderRadius: '15px 15px 0 0'
-        }"
-      >
-        <el-table-column type="selection" :selectable="selectable" width="55" />
-        <el-table-column
-          label="趋势（上次更新时间 3月10日14:24）"
-          min-width="280"
+        <div class="box">
+          <div class="header">
+            <div class="left">
+              相关查询
+              <el-icon><QuestionFilled /></el-icon>
+            </div>
+            <div class="right">
+              <section class="options">
+                <el-select
+                  v-model="value"
+                  class="autoWidth"
+                  placeholder="Select"
+                  :suffix-icon="IconFilter"
+                >
+                  <template #prefix>
+                    {{
+                      (options.find((item) => item.value === value) || {}).label
+                    }}
+                  </template>
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </section>
+              <el-icon><Download /></el-icon>
+            </div>
+          </div>
+          <div class="sort-content">
+            <div class="item" v-for="(v, k) of arrSort1" :key="k">
+              <div class="left">
+                <span>{{ k + 1 }}</span> {{ v.label }}
+              </div>
+              <div class="right">
+                {{ v.value }}
+                <el-icon><MoreFilled /></el-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section v-show="currTab === 2" class="table">
+        <el-table
+          ref="multipleTableRef"
+          :data="tableData"
+          row-key="id"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+          :header-cell-style="{
+            backgroundColor: '#FAFAFA',
+            borderRadius: '15px 15px 0 0'
+          }"
         >
-          <template #default="scope">{{ scope.row.date }}</template>
-        </el-table-column>
-        <el-table-column property="name" label="搜索量" width="120" />
-        <el-table-column property="address" label="已开始" min-width="120" />
-        <el-table-column property="qq" label="趋势细分" min-width="220" />
-        <el-table-column property="ee" label="过去24小时" min-width="220" />
-      </el-table>
-    </section>
-    <section class="pagination">
-      <el-config-provider :locale="zhCn">
-        <el-pagination
-          v-model:current-page="currentPage4"
-          v-model:page-size="pageSize4"
-          :page-sizes="[10, 20, 30, 40]"
-          :size="size"
-          :disabled="disabled"
-          :background="background"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </el-config-provider>
-    </section>
+          <el-table-column
+            type="selection"
+            :selectable="selectable"
+            width="55"
+          />
+          <el-table-column
+            label="趋势（上次更新时间 3月10日14:24）"
+            min-width="280"
+          >
+            <template #default="scope">{{ scope.row.date }}</template>
+          </el-table-column>
+          <el-table-column property="name" label="搜索量" width="120" />
+          <el-table-column property="address" label="已开始" min-width="120" />
+          <el-table-column property="qq" label="趋势细分" min-width="220" />
+          <el-table-column property="ee" label="过去24小时" min-width="220" />
+        </el-table>
+      </section>
+      <section v-show="currTab === 2" class="pagination">
+        <el-config-provider :locale="zhCn">
+          <el-pagination
+            v-model:current-page="currentPage4"
+            v-model:page-size="pageSize4"
+            :page-sizes="[10, 20, 30, 40]"
+            :size="size"
+            :disabled="disabled"
+            :background="background"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="400"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </el-config-provider>
+      </section>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watchEffect } from 'vue'
 import * as echarts from 'echarts'
 import type { TableInstance } from 'element-plus'
 import type { ComponentSize } from 'element-plus'
@@ -247,7 +277,12 @@ import generatorPanel from '@/components/generator-panel'
 import introducePanelPanel from '@/components/introduce-panel'
 import IconFilter from '../cpns/icon-filter.vue'
 import IconRank from '../cpns/icon-rank.vue'
+import formPage from '../cpns/form.vue'
 
+const isForm = ref(true)
+const toggle = (val: boolean) => {
+  isForm.value = val
+}
 const value = ref('am')
 const value1 = ref('1')
 const currTab = ref(1)
@@ -402,58 +437,71 @@ const add = () => {
   alert('add')
 }
 
-onMounted(() => {
-  var myChart = echarts.init(document.getElementById('hortTime'))
-  // 绘制图表
-  myChart.setOption({
-    xAxis: {
-      type: 'category',
-      data: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Nov'
-      ]
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        data: [120, 132, 101, 134, 90, 230, 210],
-        type: 'line',
-        smooth: true
+watchEffect(
+  () => {
+    if (isForm.value) return
+    var myChart = echarts.init(document.getElementById('hortTime'))
+    // 绘制图表
+    myChart.setOption({
+      xAxis: {
+        type: 'category',
+        data: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Nov'
+        ]
       },
-      {
-        data: [220, 282, 201, 234, 290, 430, 410],
-        type: 'line',
-        smooth: true
-      }
-    ]
-  })
-})
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          data: [120, 132, 101, 134, 90, 230, 210],
+          type: 'line',
+          smooth: true
+        },
+        {
+          data: [220, 282, 201, 234, 290, 430, 410],
+          type: 'line',
+          smooth: true
+        }
+      ]
+    })
+  },
+  {
+    flush: 'post'
+  }
+)
 </script>
 
 <style scoped lang="less">
 .queryIndex {
-  padding: 20px 30px;
   text-align: start;
   section {
     margin: 30px 0;
   }
+  .form-page {
+    margin-top: 10px;
+    height: calc(100vh - 80px);
+  }
+  .query-page {
+    padding: 0 20px 30px;
+  }
   .tabs {
-    height: 50px;
+    height: 70px;
     display: flex;
     gap: 15px;
     font-size: 18px;
+    padding: 20px;
     .tab {
       height: 48px;
       line-height: 32px;
@@ -469,7 +517,11 @@ onMounted(() => {
   }
   .options {
     display: flex;
-    gap: 15px;
+    justify-content: space-between;
+    .left {
+      display: flex;
+      gap: 15px;
+    }
   }
   //
   .autoWidth {
