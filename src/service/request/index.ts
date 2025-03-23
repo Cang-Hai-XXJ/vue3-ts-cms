@@ -31,14 +31,14 @@ class MYRequest {
     this.isShowLoading = config.isShowLoading ?? LOADING_STATE
 
     // 单个实例的拦截器
-    // this.instance.interceptors.request.use(
-    //   this.interceptors?.requestInterceptor,
-    //   this.interceptors?.requestInterceptorCatch
-    // )
-    // this.instance.interceptors.response.use(
-    //   this.interceptors?.responseInterceptor,
-    //   this.interceptors?.responseInterceptorCatch
-    // )
+    this.instance.interceptors.request.use(
+      this.interceptors?.requestInterceptor,
+      this.interceptors?.requestInterceptorCatch
+    )
+    this.instance.interceptors.response.use(
+      this.interceptors?.responseInterceptor,
+      this.interceptors?.responseInterceptorCatch
+    )
 
     // 所有实例的拦截器
     this.instance.interceptors.request.use(
@@ -65,8 +65,9 @@ class MYRequest {
 
         // returnCode 类型错误拦截
         const { data } = res.data
-        if (data?.returnCode === '-1001') {
+        if (res.data?.success === false) {
           console.log('请求失败')
+          return res.data
         } else {
           return data
         }
@@ -95,11 +96,15 @@ class MYRequest {
       }
       this.instance
         .request<any, T>(config)
-        .then((res) => {
+        .then((res: any) => {
           if (config.interceptors?.responseInterceptor) {
             res = config.interceptors.responseInterceptor(res)
           }
-          resolve(res)
+          if (res?.success === false) {
+            reject(res)
+          } else {
+            resolve(res)
+          }
         })
         .catch((err) => {
           reject(err)

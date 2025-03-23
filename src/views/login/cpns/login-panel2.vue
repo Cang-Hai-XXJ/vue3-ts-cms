@@ -13,21 +13,22 @@
       <div class="box">
         <div class="box-title">手机号登录</div>
         <div class="box-content">
-          <el-form :rules="rules" :model="user" ref="ruleFormRef">
+          <el-form :rules="rules" :model="userForm" ref="ruleFormRef">
             <el-form-item prop="phone">
               <el-input
                 placeholder="请输入手机号"
                 :input-style="inputStyle"
-                v-model="user.phone"
+                v-model="userForm.phone"
+                maxLength="11"
               >
                 <template #prepend>+86</template>
               </el-input>
             </el-form-item>
-            <el-form-item prop="password">
+            <el-form-item prop="authCode">
               <el-input
                 :input-style="inputStyle"
                 placeholder="请输入手机验证码"
-                v-model="user.password"
+                v-model="userForm.authCode"
               >
                 <template #append>
                   <el-button
@@ -35,26 +36,29 @@
                     type="primary"
                     color="#4040E9"
                     :text="true"
+                    @click="handleSendSms"
                   >
                     获取验证码
                   </el-button>
                 </template>
               </el-input>
             </el-form-item>
-            <el-form-item prop="authCode">
+            <el-form-item prop="captchaCode">
               <div class="verify-code">
                 <el-input
                   :input-style="inputStyle2"
                   placeholder="请输入图形验证码"
-                  v-model="user.authCode"
+                  v-model="userForm.captchaCode"
                 />
-                <el-input :input-style="inputStyle3" v-model="user.authCode" />
+                <div class="authCode-box" @click="handleGetCaptchaCode">
+                  <img :src="captchaCodeSrc" alt="captchaCode" />
+                </div>
               </div>
             </el-form-item>
           </el-form>
         </div>
         <div class="box-footer">
-          <el-button class="login-btn" type="primary" @click="handleClickLogin"
+          <el-button class="login-btn" type="primary" @click="loginAction"
             >登录</el-button
           >
           <el-checkbox class="checked2" v-model="checked2"
@@ -73,11 +77,96 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus'
 
-const user = reactive({
+import {
+  captchaCheck,
+  getCaptchaCode,
+  smsLogin,
+  sendSms
+} from '@/service/request/login/login'
+import localCache from '@/utils/localCache'
+
+// 短信验证码
+const handleSendSms = () => {
+  if (/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(userForm.phone)) {
+    if (/^[A-z0-9]{1,12}$/.test(userForm.captchaCode)) {
+      sendSms({
+        imageUuid: uuid.value,
+        imageCode: userForm.captchaCode,
+        tel: userForm.phone
+      })
+        .then(() => {
+          ElMessage.success('验证码已发送')
+        })
+        .catch((err) => {
+          ElMessage.error(err)
+        })
+    } else {
+      ElMessage.error('请填写图形验证码')
+    }
+  } else {
+    ElMessage.error('请填写正确的手机号')
+  }
+}
+// 图片验证码逻辑
+const captchaCodeSrc = ref('')
+const uuid = ref('')
+const handleGetCaptchaCode = () => {
+  getCaptchaCode()
+    .then((res) => {
+      // 获取验证码成功
+      captchaCodeSrc.value = 'data:image/png;base64,' + res.image
+      uuid.value = res.uuid
+    })
+    .catch(() => {
+      // 获取验证码失败
+      ElMessage.error('获取验证码失败')
+    })
+}
+handleGetCaptchaCode()
+// 验证码验证
+const validateCode = () => {
+  return new Promise((resolve, reject) => {
+    captchaCheck({
+      imageUuid: uuid.value,
+      imageCode: userForm.captchaCode
+    })
+      .then((res) => {
+        resolve(res)
+      })
+      .catch((err) => {
+        reject(err)
+      })
+  })
+}
+
+//登录
+const ruleFormRef = ref<FormInstance>()
+const loginAction = () => {
+  ruleFormRef.value?.validate(async (valid, fields) => {
+    if (valid) {
+      validateCode()
+        .then(() => {
+          smsLogin({
+            tel: userForm.phone,
+            authCode: userForm.authCode,
+            wxInfoId: ''
+          })
+        })
+        .catch((err) => {
+          ElMessage.error(err.message)
+        })
+    } else {
+      console.log('error submit!', fields)
+    }
+  })
+}
+// 表单数据+验证
+const userForm = reactive({
   phone: '',
-  password: '',
-  authCode: ''
+  authCode: '',
+  captchaCode: ''
 })
 const checked2 = ref<boolean>()
 const rules = reactive<FormRules>({
@@ -87,11 +176,11 @@ const rules = reactive<FormRules>({
       message: '请输入手机号'
     },
     {
-      pattern: /^[A-z0-9]{3,12}$/,
+      pattern: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
       message: '请输入正确的手机号'
     }
   ],
-  password: [
+  authCode: [
     {
       required: true,
       message: '请输入手机验证码'
@@ -100,12 +189,16 @@ const rules = reactive<FormRules>({
       pattern: /^[A-z0-9]{6,12}$/,
       message: '请输入6到12位数的字母数字组合~'
     }
+  ],
+  captchaCode: [
+    {
+      required: true,
+      message: '请输入图像验证码'
+    }
   ]
 })
 
-const handleClickLogin = () => {
-  console.log('handleClickLogin')
-}
+//wx二维码
 onMounted(() => {
   const s = document.createElement('script')
   s.type = 'text/javascript'
@@ -126,14 +219,11 @@ onMounted(() => {
 
 const inputStyle = {
   width: '100%',
-  height: '36px'
+  height: '50px'
 }
 const inputStyle2 = {
   width: '80%',
-  height: '36px'
-}
-const inputStyle3 = {
-  flex: 1
+  height: '50px'
 }
 </script>
 
@@ -209,6 +299,16 @@ const inputStyle3 = {
           display: flex;
           gap: 15px;
         }
+        .authCode-box {
+          width: 164px;
+          height: 50px;
+          border-radius: 3px;
+          border: 1px solid #d4d4d4;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
       }
       &-footer {
         width: 100%;
@@ -225,6 +325,8 @@ const inputStyle3 = {
           color: var(--main-color);
         }
         .checked2 {
+          position: relative;
+          top: 10px;
           white-space: break-spaces;
           padding: 25px 0px;
           font-size: 12px;

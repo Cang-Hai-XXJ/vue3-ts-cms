@@ -10,7 +10,8 @@ module.exports = defineConfig({
     resolve: {
       alias: {
         components: '@/components',
-        assets: '@/assets'
+        assets: '@/assets',
+        services: '@/services'
       }
     }
     // plugins: [
