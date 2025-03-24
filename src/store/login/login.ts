@@ -9,7 +9,7 @@ import {
   requestUserInfoById,
   requestMenusByRoleId
 } from '@/service/request/login/login'
-import localCache from '@/utils/localCache'
+import { localCache } from '@/utils/localCache'
 import { mapMenus2Routes } from '@/utils/map-menus'
 
 const loginModules: Module<ILoginState, IRootState> = {

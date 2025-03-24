@@ -16,7 +16,7 @@ import { reactive, ref, defineExpose } from 'vue'
 import { useStore } from 'vuex'
 import type { FormInstance, FormRules } from 'element-plus'
 
-import localCache from '@/utils/localCache'
+import { localCache } from '@/utils/localCache'
 
 const ruleFormRef = ref<FormInstance>()
 const user = reactive({

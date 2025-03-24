@@ -1,9 +1,9 @@
 import { BASE_URL, TIME_OUT, PRE_FIX } from './request/config'
 import MYRequest from './request'
-import localCache from '@/utils/localCache'
+import { localCache } from '@/utils/localCache'
 //单个请求实例
 const request = new MYRequest({
-  baseURL: BASE_URL + PRE_FIX,
+  baseURL: BASE_URL,
   timeout: TIME_OUT,
   interceptors: {
     //携带token

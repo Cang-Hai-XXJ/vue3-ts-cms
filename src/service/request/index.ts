@@ -115,11 +115,24 @@ class MYRequest {
         })
     })
   }
-  get<T>(config: MYRequestConfig<T>): Promise<T> {
-    return this.request<T>({ ...config, method: 'GET' })
+
+  get<T>(param: string, data?: any): Promise<T>
+  get<T>(param: MYRequestConfig<T>): Promise<T>
+  get<T>(param: MYRequestConfig<T> | string, data?: any): Promise<T> {
+    if (typeof param === 'string') {
+      return this.request<T>({ url: param, data: data, method: 'GET' })
+    } else {
+      return this.request<T>({ ...param, method: 'GET' })
+    }
   }
-  post<T>(config: MYRequestConfig<T>): Promise<T> {
-    return this.request<T>({ ...config, method: 'POST' })
+  post<T>(param: string, data?: any): Promise<T>
+  post<T>(param: MYRequestConfig<T>): Promise<T>
+  post<T>(param: MYRequestConfig<T> | string, data?: any): Promise<T> {
+    if (typeof param === 'string') {
+      return this.request<T>({ url: param, data: data, method: 'POST' })
+    } else {
+      return this.request<T>({ ...param, method: 'POST' })
+    }
   }
   delete<T>(config: MYRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' })

@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import localCache from '@/utils/localCache'
+import { localCache } from '@/utils/localCache'
 import { firstMenu } from '@/utils/map-menus'
 import { Header } from 'element-plus/es/components/table-v2/src/components'
 

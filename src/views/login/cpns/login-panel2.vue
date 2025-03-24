@@ -58,7 +58,11 @@
           </el-form>
         </div>
         <div class="box-footer">
-          <el-button class="login-btn" type="primary" @click="loginAction"
+          <el-button
+            class="login-btn"
+            type="primary"
+            @click="loginAction"
+            @keyDown.enter="loginAction"
             >登录</el-button
           >
           <el-checkbox class="checked2" v-model="checked2"
@@ -83,9 +87,11 @@ import {
   captchaCheck,
   getCaptchaCode,
   smsLogin,
-  sendSms
+  sendSms,
+  getWxLoginUrl
 } from '@/service/request/login/login'
-import localCache from '@/utils/localCache'
+import { localCache } from '@/utils/localCache'
+import { BASE_REDIRECT } from '@/service/request/config'
 
 // 短信验证码
 const handleSendSms = () => {
@@ -125,6 +131,15 @@ const handleGetCaptchaCode = () => {
     })
 }
 handleGetCaptchaCode()
+
+getWxLoginUrl(BASE_REDIRECT)
+  .then((res) => {
+    // 获取验证码成功
+    console.log(res)
+  })
+  .catch(() => {
+    // ElMessage.error('获取验证码失败')
+  })
 // 验证码验证
 const validateCode = () => {
   return new Promise((resolve, reject) => {
@@ -148,10 +163,16 @@ const loginAction = () => {
     if (valid) {
       validateCode()
         .then(() => {
-          smsLogin({
+          alert(BASE_REDIRECT)
+          smsLogin(BASE_REDIRECT, {
             tel: userForm.phone,
             authCode: userForm.authCode,
-            wxInfoId: ''
+            wxInfoId: localCache.getCache('user').wxId
+          }).then((res) => {
+            //token
+            localCache.setCache('token', res.jwtToken.token)
+            // 用户信息
+            localCache.setCache('user', { ...res.user, wxId: res.wxInfoId })
           })
         })
         .catch((err) => {

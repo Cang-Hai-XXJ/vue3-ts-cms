@@ -9,12 +9,12 @@ export function mapMenus2Routes(menus: any): RouteRecordRaw[] {
   const allRoutes: RouteRecordRaw[] = []
 
   //使用webpack的require解析main目录下的所有ts文件路径
-  const routeFiles = require.context('@/router/main', true, /\.ts/)
-  routeFiles.keys().forEach((key) => {
-    //使用require导入模块
-    const route = require('@/router/main' + key.split('.')[1])
-    allRoutes.push(route.default)
-  })
+  // const routeFiles = require.context('@/router/index.ts', true, /\.ts/)
+  // routeFiles.keys().forEach((key) => {
+  //   //使用require导入模块
+  //   const route = require('@/router/index.ts' + key.split('.')[1])
+  //   allRoutes.push(route.default)
+  // })
 
   function _recurseSetRoute(menus: any) {
     for (const menu of menus) {
