@@ -35,3 +35,45 @@ body,
   color: #fff !important;
   background: var(--main-color) !important;
 }
+
+// 统一定制 radio-button 样式
+.radio-group {
+  gap: 20px;
+
+  .el-radio-button__inner {
+    width: 113px;
+    height: 36px;
+    font-family: PingFang SC;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    text-align: center;
+    background-color: #fff;
+    color: #000;
+    box-sizing: content-box;
+    border: 1px solid #d4d4d4;
+    border-radius: 3px !important;
+  }
+
+  .el-radio-button.is-active .el-radio-button__original-radio:not(:disabled)+.el-radio-button__inner {
+    border-color: #4040f2;
+    color: #000;
+    background: url(@/assets/img/Rectangle@3x.png) #d8d8fe no-repeat;
+    background-size: 18px;
+    background-position: 100% 100%;
+    transition: all 0s;
+    border-radius: 3px;
+
+    &::after {
+      content: url('img/dui.png');
+      position: absolute;
+      bottom: 1px;
+      right: 2px;
+      color: #fff;
+    }
+  }
+
+  .el-radio-button__inner:hover {
+    color: #4040f2;
+  }
+}

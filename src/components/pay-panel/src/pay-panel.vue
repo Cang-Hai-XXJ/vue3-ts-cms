@@ -138,7 +138,6 @@ watch(
     color: #ff513a !important;
     margin-top: 2px !important;
   }
-  // TODO: css
   /deep/.el-radio-button__inner {
     width: 113px;
     height: 36px;

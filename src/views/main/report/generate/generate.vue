@@ -23,18 +23,26 @@
           <el-form-item label="商品名称">
             <el-input v-model="form.name" />
           </el-form-item>
-          <el-form-item label="国家" label-width="50">
-            <el-select v-model="form.country" placeholder=" ">
-              <el-option label="美国" value="shanghai" />
-              <el-option label="日本" value="beijing" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="地区">
-            <el-select v-model="form.region" placeholder=" ">
-              <el-option label="关东" value="shanghai" />
-              <el-option label="川西" value="beijing" />
-            </el-select>
-          </el-form-item>
+          <el-row>
+            <el-col :span="11">
+              <el-form-item label="国家" label-width="50">
+                <el-select v-model="form.country" placeholder=" ">
+                  <el-option label="美国" value="shanghai" />
+                  <el-option label="日本" value="beijing" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2"> </el-col>
+            <el-col :span="11">
+              <el-form-item label="地区">
+                <el-select v-model="form.region" placeholder=" ">
+                  <el-option label="关东" value="shanghai" />
+                  <el-option label="川西" value="beijing" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
           <el-form-item label="版本">
             <el-radio-group v-model="form.resource" class="radio-group">
               <el-radio-button value="normal">普通版</el-radio-button>
@@ -160,44 +168,6 @@ const backHome = () => {
       margin-bottom: 20px;
     }
     .content {
-      .radio-group {
-        gap: 20px;
-        /deep/.el-radio-button__inner {
-          width: 113px;
-          height: 36px;
-          border-radius: 3px;
-          font-family: PingFang SC;
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 18px;
-          text-align: center;
-          background-color: #fff;
-          color: #000;
-          box-sizing: content-box;
-          border: 1px solid #d4d4d4;
-        }
-        /deep/.el-radio-button.is-active
-          .el-radio-button__original-radio:not(:disabled)
-          + .el-radio-button__inner {
-          border-color: #4040f2;
-          color: #000;
-          background: url(@/assets/img/Rectangle@3x.png) #d8d8fe no-repeat;
-          background-size: 18px;
-          background-position: 100% 100%;
-          transition: all 0s;
-          &::after {
-            content: url('img/dui.png');
-            position: absolute;
-            bottom: 1px;
-            right: 2px;
-            color: #fff;
-          }
-        }
-
-        /deep/.el-radio-button__inner:hover {
-          color: #4040f2;
-        }
-      }
       .btn {
         height: 45px;
         font-size: 16px;
