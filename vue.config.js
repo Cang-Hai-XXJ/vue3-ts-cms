@@ -11,7 +11,8 @@ module.exports = defineConfig({
       alias: {
         components: '@/components',
         assets: '@/assets',
-        services: '@/services'
+        services: '@/services',
+        img: '@/assets/img'
       }
     }
     // plugins: [

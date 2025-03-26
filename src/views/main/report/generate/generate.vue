@@ -15,7 +15,7 @@
       <div class="title">创建选品报告</div>
       <div class="content">
         <el-form
-          :model="form"
+          v-model="form"
           label-width="auto"
           label-position="top"
           style="max-width: 600px"
@@ -24,15 +24,15 @@
             <el-input v-model="form.name" />
           </el-form-item>
           <el-form-item label="国家" label-width="50">
-            <el-select v-model="form.region" placeholder=" ">
-              <el-option label="Zone one" value="shanghai" />
-              <el-option label="Zone two" value="beijing" />
+            <el-select v-model="form.country" placeholder=" ">
+              <el-option label="美国" value="shanghai" />
+              <el-option label="日本" value="beijing" />
             </el-select>
           </el-form-item>
           <el-form-item label="地区">
             <el-select v-model="form.region" placeholder=" ">
-              <el-option label="Zone one" value="shanghai" />
-              <el-option label="Zone two" value="beijing" />
+              <el-option label="关东" value="shanghai" />
+              <el-option label="川西" value="beijing" />
             </el-select>
           </el-form-item>
           <el-form-item label="版本">
@@ -76,15 +76,11 @@
 import { reactive, ref } from 'vue'
 import payPanel from '@/components/pay-panel'
 import router from '@/router'
-// do not use same name with ref
 
 const form = reactive({
   name: '',
+  country: '',
   region: '',
-  date1: '',
-  date2: '',
-  delivery: false,
-  type: [],
   resource: '',
   desc: ''
 })
@@ -164,7 +160,6 @@ const backHome = () => {
       margin-bottom: 20px;
     }
     .content {
-      // FIXME
       .radio-group {
         gap: 20px;
         /deep/.el-radio-button__inner {
@@ -176,17 +171,29 @@ const backHome = () => {
           font-weight: 500;
           line-height: 18px;
           text-align: center;
-          border: 1px solid #d4d4d4;
           background-color: #fff;
+          color: #000;
           box-sizing: content-box;
+          border: 1px solid #d4d4d4;
         }
         /deep/.el-radio-button.is-active
           .el-radio-button__original-radio:not(:disabled)
           + .el-radio-button__inner {
-          background-color: #d8d8fe;
           border-color: #4040f2;
           color: #000;
+          background: url(@/assets/img/Rectangle@3x.png) #d8d8fe no-repeat;
+          background-size: 18px;
+          background-position: 100% 100%;
+          transition: all 0s;
+          &::after {
+            content: url('img/dui.png');
+            position: absolute;
+            bottom: 1px;
+            right: 2px;
+            color: #fff;
+          }
         }
+
         /deep/.el-radio-button__inner:hover {
           color: #4040f2;
         }

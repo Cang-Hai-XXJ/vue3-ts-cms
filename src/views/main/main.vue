@@ -90,5 +90,6 @@ const handleFoldChange = (isFold: boolean) => {
   text-align: center;
   background-color: #fff;
   padding: 0 !important;
+  overflow-x: hidden;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div class="nav-menu">
     <div class="logo">
-      <img class="img" src="~@/assets/img/image22.png" alt="logo" />
-      <span v-if="!collapse" class="title">选品大师</span>
+      <img class="img" src="~@/assets/img/home-icon-black.png" alt="logo" />
+      <div v-if="!collapse" class="title">选品大师</div>
     </div>
     <el-menu
       :default-active="defaultMenu"
@@ -118,7 +118,6 @@ defineProps({
       width: 30px;
       height: 30px;
       margin-right: 10px;
-      background-color: #000;
     }
 
     .title {

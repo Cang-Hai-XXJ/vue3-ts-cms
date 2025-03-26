@@ -20,7 +20,7 @@
           <img
             class="image"
             src="~@/assets/img/Frame@1x.png"
-            alt="定制化报告服务"
+            alt="市场趋势分析"
           />
           <div class="name">市场趋势分析</div>
         </div>
@@ -33,7 +33,7 @@
           <img
             class="image"
             src="~@/assets/img/Vector@1x.png"
-            alt="定制化报告服务"
+            alt="竞争分析工具"
           />
           <div class="name">竞争分析工具</div>
         </div>

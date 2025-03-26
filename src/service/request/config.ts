@@ -6,7 +6,7 @@ export const BASE_REDIRECT = 'http://localhost:8080/#/main/index'
 //152.136.185.210:5000/
 
 if (process.env.NODE_ENV === 'development') {
-  BASE_URL = 'http://118.193.62.187:18882'
+  BASE_URL = 'https://koiai.com.cn:18882'
 } else if (process.env.NODE_ENV === 'production') {
-  BASE_URL = 'http://118.193.62.187:18882'
+  BASE_URL = 'https://koiai.com.cn:18882'
 }

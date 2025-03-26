@@ -3,7 +3,7 @@
     <el-icon class="close"><Close /></el-icon>
     <section class="wx-login">
       <div class="box">
-        <div class="box-icon"></div>
+        <img class="box-icon" src="~@/assets/img/home-icon.png" />
         <div class="box-title">欢迎来到选品大师</div>
         <div class="box-desc">可使用微信扫码登录</div>
         <div class="box-qr-code" id="wxQr"></div>
@@ -34,11 +34,13 @@
                   <el-button
                     key="primary"
                     type="primary"
+                    class="authCode"
                     color="#4040E9"
                     :text="true"
                     @click="handleSendSms"
+                    :disabled="time < 60"
                   >
-                    获取验证码
+                    {{ time < 60 ? time + 's' : '获取验证码' }}
                   </el-button>
                 </template>
               </el-input>
@@ -94,6 +96,8 @@ import { localCache } from '@/utils/localCache'
 import { BASE_REDIRECT } from '@/service/request/config'
 
 // 短信验证码
+const time = ref(60)
+
 const handleSendSms = () => {
   if (/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(userForm.phone)) {
     if (/^[A-z0-9]{1,12}$/.test(userForm.captchaCode)) {
@@ -104,6 +108,15 @@ const handleSendSms = () => {
       })
         .then(() => {
           ElMessage.success('验证码已发送')
+          const timer = setInterval(() => {
+            time.value--
+            console.log(time.value)
+
+            if (time.value <= 0) {
+              clearInterval(timer)
+              time.value = 60
+            }
+          }, 1000)
         })
         .catch((err) => {
           ElMessage.error(err)
@@ -276,10 +289,11 @@ const inputStyle2 = {
       align-items: center;
       justify-content: space-between;
       color: #fff;
+      position: relative;
+      bottom: 30px;
       .box-icon {
-        width: 56px;
-        height: 56px;
-        background-image: url('assets/img/image22.png');
+        width: 90px;
+        height: 90px;
       }
       .box-title {
         font-size: 28px;
@@ -315,6 +329,9 @@ const inputStyle2 = {
         font-size: 36px;
       }
       &-content {
+        .authCode {
+          width: 100px;
+        }
         // width: 100%;
         .verify-code {
           display: flex;

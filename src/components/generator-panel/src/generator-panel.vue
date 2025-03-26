@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="right">
-      <img class="image" src="~@/assets/img/img1.png" alt="" />
+      <img class="image" src="~@/assets/img/report-bg.png" alt="" />
     </div>
   </div>
 </template>
@@ -67,12 +67,10 @@ const generate = () => {
     }
   }
   .right {
-    width: 300px;
-    height: 100%;
     .image {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+      width: 400px;
+      height: 400px;
+      object-fit: cover;
     }
   }
 }
