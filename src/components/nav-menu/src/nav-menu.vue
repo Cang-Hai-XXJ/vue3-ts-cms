@@ -99,6 +99,10 @@ defineProps({
   height: calc(100% - 90px);
   background-color: #fff;
   position: relative;
+  // 解决折叠后 reserve 的位置重叠问题
+  :deep(ul) {
+    height: calc(100% - 90px);
+  }
   .reserve {
     position: absolute;
     bottom: 0;
