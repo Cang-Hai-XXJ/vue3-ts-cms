@@ -16,6 +16,7 @@
     "element-plus": "^2.9.7",
     "normalize.css": "^8.0.1",
     "vue": "^3.2.13",
+    "vue-qr": "^4.0.9",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0"
   },

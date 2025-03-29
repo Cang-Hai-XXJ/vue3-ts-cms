@@ -14,7 +14,7 @@ import {
  * @param {string} params.memo 备注
  * @returns
  */
-export function genPayQR(params: GenPayQRParams): Promise<GenPayQRRes> {
+export function getPayQR(params: GenPayQRParams): Promise<GenPayQRRes> {
   return request.post(`/v1/users/pay_qr`, params)
 }
 

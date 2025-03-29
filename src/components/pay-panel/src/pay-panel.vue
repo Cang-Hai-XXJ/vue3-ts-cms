@@ -48,16 +48,21 @@
           style="height: 100%; margin-right: 40px"
         />
         <div class="payBox" :class="{ 'flex-column': isColumn }">
-          <img
+          <!-- <img
             src="~@/assets/img/qrCode.png"
             alt="qrCode"
             :class="{ order1: isColumn }"
-          />
+          /> -->
+          <vueQr :text="qrCodeUrl" :callback="getImgInfo"></vueQr>
           <div class="contentClass">
             <p>在线支付</p>
             <el-radio-group v-model="payType" class="radio-group">
-              <el-radio-button value="Al">支付宝</el-radio-button>
-              <el-radio-button value="Wx">微信</el-radio-button>
+              <el-radio-button value="Al" @click="handleClickPay(1)"
+                >支付宝</el-radio-button
+              >
+              <el-radio-button value="Wx" @click="handleClickPay(2)"
+                >微信</el-radio-button
+              >
             </el-radio-group>
             <p>应付金额 <span>¥999.00</span></p>
             <p class="tips">剩余支付时间6时55分52秒，否则订单将自动失效</p>
@@ -71,8 +76,11 @@
 <script lang="ts" setup>
 const payType = ref('')
 import { ref, watch, toRefs, computed, PropType } from 'vue'
+import vueQr from 'vue-qr/src/packages/vue-qr.vue'
+
 const emit = defineEmits(['update:modelValue'])
 import { radioItem } from './type'
+import { getPayQR } from '@/service/request/user'
 
 const props = defineProps({
   modelValue: {
@@ -99,6 +107,22 @@ const props = defineProps({
   }
 })
 
+// 付款码
+const qrCodeUrl = ref('')
+const outTradeNo = ref('')
+const handleClickPay = (payType: number) => {
+  getPayQR({
+    rechargeProductId: payType,
+    memo: ''
+  }).then((res) => {
+    qrCodeUrl.value = res.qrCodeUrl
+    outTradeNo.value = res.outTradeNo
+  })
+}
+// 二维码制作完成回调
+const getImgInfo = () => {
+  console.log()
+}
 const visible = ref(false)
 const { modelValue } = toRefs(props)
 const isColumn = computed(() => !!props.radioGroup.length)
