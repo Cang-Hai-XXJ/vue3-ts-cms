@@ -36,6 +36,14 @@ const loginModules: Module<ILoginState, IRootState> = {
           sort: 1
         },
         {
+          name: '报告市场',
+          type: 2,
+          id: 6,
+          icon: 'TrendCharts',
+          url: '/main/market',
+          sort: 1
+        },
+        {
           name: '工具',
           type: 2,
           id: 3,

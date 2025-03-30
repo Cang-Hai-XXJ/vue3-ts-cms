@@ -2,7 +2,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import { localCache } from '@/utils/localCache'
 import { firstMenu } from '@/utils/map-menus'
-import { Header } from 'element-plus/es/components/table-v2/src/components'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -33,6 +32,14 @@ const routes: RouteRecordRaw[] = [
         path: 'queryIndex',
         name: 'queryIndex',
         component: () => import('@/views/main/query/index/index.vue'),
+        meta: {
+          noHeader: true
+        }
+      },
+      {
+        path: 'market',
+        name: 'market',
+        component: () => import('@/views/main/report/market/market.vue'),
         meta: {
           noHeader: true
         }

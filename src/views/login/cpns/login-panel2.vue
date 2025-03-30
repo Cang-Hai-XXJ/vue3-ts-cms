@@ -109,6 +109,7 @@ import {
 import { localCache } from '@/utils/localCache'
 import { BASE_REDIRECT } from '@/service/request/config'
 import type { TabsPaneContext } from 'element-plus'
+import router from '@/router'
 
 const activeName = ref('first')
 
@@ -198,6 +199,7 @@ const loginAction = () => {
             localCache.setCache('token', res.jwtToken.token)
             // 用户信息
             localCache.setCache('user', { ...res.user, wxId: res.wxInfoId })
+            router.push('main/index')
           })
         })
         .catch((err) => {
