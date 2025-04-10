@@ -7,7 +7,7 @@
       </el-aside>
       <el-container class="page">
         <el-header v-show="isShowHeader" class="page-header">
-          <nav-header @foldChange="handleFoldChange" />
+          <nav-header :type="type" @foldChange="handleFoldChange" />
         </el-header>
         <el-main class="page-content">
           <div class="page-bg">
@@ -32,6 +32,9 @@ console.log(router, route.meta)
 
 const isCollapse = ref(false)
 const isShowHeader = computed(() => !router.currentRoute.value.meta.noHeader)
+const type = computed(
+  () => (router.currentRoute.value?.meta?.header as string) ?? 'default'
+)
 const handleFoldChange = (isFold: boolean) => {
   isCollapse.value = isFold
 }
@@ -54,9 +57,10 @@ const handleFoldChange = (isFold: boolean) => {
   height: 100%;
   .page-bg {
     width: 100%;
-    height: 100%;
+    height: auto;
     background-color: #fff;
     border-radius: 5px;
+    // overflow: hidden;
   }
 }
 .el-header,

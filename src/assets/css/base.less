@@ -25,9 +25,13 @@ body,
   --main-color: #4040e9;
   --border-color: #f1f1f1;
   --font-color: #4040f2;
+  --bg-color: #f5f6f7;
   --header-height: 70px;
+  // el-primary主色
+  --el-color-primary: #4040e9 !important;
 }
 
+//按钮颜色
 .btn {
   width: 100% !important;
   height: 50px;
@@ -36,6 +40,40 @@ body,
   color: #fff !important;
   background: var(--main-color) !important;
 }
+
+.bold {
+  font-weight: bold;
+}
+
+.hint {
+  color: #A8B0B9;
+}
+
+
+
+.font_12 {
+  font-size: 12px;
+}
+
+.pd_20 {
+  padding: 20px;
+}
+
+.mg_20 {
+  margin: 20px 0;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+// ----------------------------------------------------------------------------
 
 // 统一定制 radio-button 样式
 .radio-group {
@@ -76,5 +114,30 @@ body,
 
   .el-radio-button__inner:hover {
     color: #4040f2;
+  }
+}
+
+// 统一定制 pagination 样式
+.pagination {
+  .el-pagination.is-background .el-pager li.is-active {
+    background-color: var(--main-color);
+  }
+
+  .el-pager li:hover {
+    &:not(.is-active) {
+      color: var(--main-color);
+    }
+  }
+
+  .el-pagination button:hover {
+    color: var(--main-color);
+  }
+
+  .el-pager li.is-active {
+    color: var(--main-color);
+  }
+
+  .el-select-dropdown__item.is-selected {
+    color: var(--main-color);
   }
 }

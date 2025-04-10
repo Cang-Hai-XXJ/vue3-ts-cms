@@ -36,10 +36,44 @@ const loginModules: Module<ILoginState, IRootState> = {
           sort: 1
         },
         {
+          name: '数据服务',
+          type: 1,
+          id: 12,
+          icon: 'DataAnalysis',
+          url: '/main/data',
+          sort: 1,
+          children: [
+            {
+              name: '批量关键词',
+              type: 1,
+              id: 11,
+              url: '/main/data/batchKeywords'
+            },
+            {
+              name: '关联关键词',
+              type: 1,
+              id: 12,
+              url: '/main/data/relatedKeywords'
+            },
+            {
+              name: '排名关键词',
+              type: 1,
+              id: 13,
+              url: '/main/data/rankingKeywords'
+            },
+            {
+              name: '竞品查询',
+              type: 1,
+              id: 14,
+              url: '/main/data/competitorSearch'
+            }
+          ]
+        },
+        {
           name: '报告市场',
           type: 2,
           id: 6,
-          icon: 'TrendCharts',
+          icon: 'Document',
           url: '/main/market',
           sort: 1
         },

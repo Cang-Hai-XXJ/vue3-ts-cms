@@ -1,7 +1,7 @@
 <template>
   <div class="nav-user">
     <img class="avatar" src="~@/assets/img/logo.svg" alt="avatar" />
-    <div v-if="!collapse" class="name">果果果果</div>
+    <div v-if="!collapse" class="name" @click="handClick">果果果果</div>
   </div>
 </template>
 
@@ -13,6 +13,11 @@ import { useStoreWithModules } from '@/store'
 import { pathMap2Menu } from '@/utils/map-menus'
 
 const store = useStoreWithModules()
+const handClick = (id: any) => {
+  router.push({
+    path: `/main/user/${id}`
+  })
+}
 
 defineProps({
   collapse: {
@@ -43,6 +48,9 @@ defineProps({
     img {
       object-fit: contain;
     }
+  }
+  .name {
+    height: auto;
   }
 }
 </style>

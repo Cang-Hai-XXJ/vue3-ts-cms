@@ -41,7 +41,31 @@ const routes: RouteRecordRaw[] = [
         name: 'market',
         component: () => import('@/views/main/report/market/market.vue'),
         meta: {
-          noHeader: true
+          header: 'search'
+        }
+      },
+      {
+        path: 'marketDetail/:id',
+        name: 'marketDetail',
+        component: () => import('@/views/main/report/market/marketDetail.vue'),
+        meta: {
+          header: 'search'
+        }
+      },
+      {
+        path: 'user/:id',
+        name: 'user',
+        component: () => import('@/views/main/user/index.vue'),
+        meta: {
+          header: 'search'
+        }
+      },
+      {
+        path: 'data/batchKeywords',
+        name: 'batchKeywords',
+        component: () => import('@/views/main/dataService/batchKeywords.vue'),
+        meta: {
+          header: 'search'
         }
       }
     ]

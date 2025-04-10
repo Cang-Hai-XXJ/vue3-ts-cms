@@ -1,22 +1,14 @@
 <template>
   <div class="market">
-    <section class="search">
-      <el-input
-        v-model="input"
-        style="width: 800px; height: 45px"
-        placeholder="请输入关键词搜索（多个关键词用空格分开）"
-        class="input-with-select"
-        size="large"
-      >
-        <template #suffix>
-          <el-button class="btn" size="large">发现一下 </el-button>
-        </template>
-      </el-input>
-    </section>
     <section class="filter">
       <div class="box" v-for="item of arr" :key="item.title">
         <span class="title">{{ item.title }}：</span>
-        <span class="content" v-for="i of item.content" :key="i.value">
+        <span
+          class="content"
+          v-for="i of item.content"
+          :key="i.value"
+          @click="changeColor($event.target, i)"
+        >
           {{ i.label }}
         </span>
       </div>
@@ -44,34 +36,47 @@
           <span>
             价格
             <span class="icons">
-              <el-icon><ArrowUpBold /></el-icon>
-              <el-icon><ArrowDownBold /></el-icon>
+              <el-icon
+                ><ArrowUpBold @click="ascending('price', $event)"
+              /></el-icon>
+              <el-icon
+                ><ArrowDownBold @click="descending('price', $event)"
+              /></el-icon>
             </span>
           </span>
           <span>
             时间
             <span class="icons">
-              <el-icon><ArrowUpBold /></el-icon>
-              <el-icon><ArrowDownBold /></el-icon>
+              <el-icon
+                ><ArrowUpBold @click="ascending('time', $event)"
+              /></el-icon>
+              <el-icon
+                ><ArrowDownBold @click="descending('time', $event)"
+              /></el-icon>
             </span>
           </span>
           <span class="right">{{ currPage }} / {{ totalPage }} </span>
         </div>
         <div class="content">
           <el-card
+            v-for="item of new Array(12)"
+            :key="item"
             class="el-card"
             shadow="hover"
-            v-for="item of new Array(8)"
-            :key="item"
+            @click="gotoDetail(item)"
           >
             <img
               src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
             />
             <template #footer>
-              <div class="header">2025年中国新能源汽车行业深度研究报告</div>
+              <div class="header">
+                2025年中国新能源汽车行业深度研究报告2025年中国新能源汽车行业深度研究报告
+              </div>
               <div class="footer">
                 <div>2025-01-15</div>
-                <div>202</div>
+                <div>
+                  <el-icon><Star /></el-icon>202
+                </div>
               </div>
             </template>
           </el-card>
@@ -91,7 +96,6 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { Search } from '@element-plus/icons-vue'
 import router from '@/router'
 
 const arr = reactive([
@@ -182,12 +186,47 @@ const arr = reactive([
     ]
   }
 ])
-const input = ref('')
 const currPage = ref(1)
 const totalPage = ref(500)
+const currSelected = ref(0)
+type sortType = 'price' | 'time'
 
-const backHome = () => {
-  // router.go(-1)
+const changeColor = (element: any, i: any) => {
+  document.querySelectorAll('.filter .content').forEach((item: any) => {
+    item.style.color = '#6b7280'
+  })
+  element.style.color = '#4169E1'
+
+  console.log(i)
+}
+
+const ascending = (type: sortType, event: any) => {
+  document.querySelectorAll('.icons svg').forEach((item: any) => {
+    item.style.color = '#6b7280'
+  })
+  event.target.style.color = '#4169E1'
+  switch (type) {
+    case 'price':
+      // router.go(-1)
+      break
+    case 'time':
+      // router.go(-1)
+      break
+  }
+}
+const gotoDetail = (item: any) => {
+  router.push(`marketDetail/${item?.id}`)
+}
+const descending = (type: sortType, event: any) => {
+  event.target.style.color = '#4169E1'
+  switch (type) {
+    case 'price':
+      // router.go(-1)
+      break
+    case 'time':
+      // router.go(-1)
+      break
+  }
 }
 </script>
 
@@ -199,12 +238,6 @@ const backHome = () => {
     margin: 15px 40px;
   }
 
-  .search {
-    .btn {
-      width: 100px !important;
-      margin-right: -15px;
-    }
-  }
   .filter {
     width: 100%;
     margin-top: 30px;
@@ -217,8 +250,8 @@ const backHome = () => {
       text-align: start;
       display: flex;
       gap: 10px;
-      :nth-child(2) {
-        color: #4169e1;
+      .selected {
+        color: var(--main-color);
       }
       .content {
         cursor: pointer;
@@ -289,7 +322,7 @@ const backHome = () => {
       .content {
         display: flex;
         flex-wrap: wrap;
-        gap: 20px;
+        gap: 10px;
         .el-card {
           width: 260px;
           :hover {
@@ -307,17 +340,32 @@ const backHome = () => {
             padding: 7px 0;
           }
           .header {
+            height: 46px;
             font-size: 16px;
             font-weight: 500;
             color: #1f2937;
             padding: 7px 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            line-clamp: 2;
+            box-orient: vertical;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
           }
           .footer {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             font-size: 14px;
             color: #6b7280;
             padding: 7px 15px;
+            div {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              gap: 5px;
+            }
           }
         }
       }

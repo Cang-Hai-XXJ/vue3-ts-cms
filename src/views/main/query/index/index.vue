@@ -245,29 +245,67 @@
             label="趋势（上次更新时间 3月10日14:24）"
             min-width="280"
           >
-            <template #default="scope">{{ scope.row.date }}</template>
+            <template #default="scope">
+              <span class="bold">{{ scope.$index + 1 }}</span>
+              {{ scope.row.name }}</template
+            >
           </el-table-column>
-          <el-table-column property="name" label="搜索量" width="120" />
-          <el-table-column property="address" label="已开始" min-width="120" />
-          <el-table-column property="qq" label="趋势细分" min-width="220" />
-          <el-table-column property="ee" label="过去24小时" min-width="220" />
+          <el-table-column property="name" label="搜索量" width="120">
+            <template #default="scope">
+              <div>{{ scope.row.search }}</div>
+              <div class="hint center font_12">
+                <el-icon><Top /></el-icon>
+                <!-- <el-icon><Bottom /></el-icon> -->
+                {{ scope.row.searchUp }}
+              </div>
+            </template>
+          </el-table-column>
+
+          <el-table-column property="begin" label="已开始" min-width="120">
+            <template #default="scope">
+              <div>{{ scope.row.begin }}</div>
+              <div class="hint center font_12">
+                <el-icon><Clock /></el-icon>
+                {{ scope.row.beginDetail }}
+              </div>
+            </template>
+          </el-table-column>
+
+          <el-table-column property="qq" label="趋势细分" min-width="220">
+            <template #default="scope">
+              <div class="underline">{{ scope.row.detail }}</div>
+            </template>
+          </el-table-column>
+
+          <el-table-column property="ee" label="过去24小时" min-width="220">
+            <template #default="scope">
+              <div
+                :id="'chart_' + scope.row.id"
+                style="height: 60px; width: 200px"
+              >
+                <!-- {{ eChartsInit('chart_' + scope.row.id, scope.row._24Date) }} -->
+              </div>
+            </template>
+          </el-table-column>
         </el-table>
       </section>
       <section v-show="currTab === 2" class="pagination">
-        <el-config-provider :locale="zhCn">
-          <el-pagination
-            v-model:current-page="currentPage4"
-            v-model:page-size="pageSize4"
-            :page-sizes="[10, 20, 30, 40]"
-            :size="size"
-            :disabled="disabled"
-            :background="background"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          />
-        </el-config-provider>
+        <div class="pagination">
+          <el-config-provider :locale="zhCn">
+            <el-pagination
+              v-model:current-page="currentPage4"
+              v-model:page-size="pageSize4"
+              :page-sizes="[10, 20, 30, 40]"
+              :size="size"
+              :disabled="disabled"
+              :background="background"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="400"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            />
+          </el-config-provider>
+        </div>
       </section>
     </div>
   </div>
@@ -280,7 +318,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted, watchEffect } from 'vue'
+import { ref, reactive, onMounted, watchEffect, nextTick, watch } from 'vue'
 import * as echarts from 'echarts'
 import type { TableInstance } from 'element-plus'
 import type { ComponentSize } from 'element-plus'
@@ -372,63 +410,146 @@ const radioGroupList: radioItem[] = [
 ]
 // 表格数据
 interface Goods {
-  id: number
-  date: string
+  id: string
   name: string
-  address: string
+  search: string
+  searchUp: string
+  begin: string
+  beginDetail: string
+  detail: string
+  _24Date: any
 }
 
 const multipleTableRef = ref<TableInstance>()
 const multipleSelection = ref<Goods[]>([])
 
-const selectable = (row: Goods) => ![1, 2].includes(row.id)
+const selectable = (row: Goods) => !['1', '2'].includes(row.id)
 
 const handleSelectionChange = (val: Goods[]) => {
   multipleSelection.value = val
 }
 
+const eChartsInit = (
+  domId: string,
+  opt: any,
+  theme?: string | object | null | undefined
+) => {
+  if (!domId) return
+  nextTick(() => {
+    console.log(document.getElementById(domId))
+    echarts.init(document.getElementById(domId), theme).setOption(opt)
+    window.addEventListener('resize', () => {
+      echarts.init(document.getElementById(domId), theme).resize()
+    })
+  })
+}
+
+const p = {
+  xAxis: {
+    type: 'category',
+    data: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Nov'
+    ],
+    show: false
+  },
+  yAxis: {
+    type: 'value',
+    show: false
+  },
+  series: [
+    {
+      data: [120, 132, 101, 134, 90, 230, 210],
+      type: 'line',
+      smooth: true
+    },
+    {
+      data: [220, 282, 201, 234, 290, 430, 410],
+      type: 'line',
+      smooth: true
+    }
+  ]
+}
 const tableData: Goods[] = [
   {
-    id: 1,
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    id: '1',
+    begin: '2小时前',
+    beginDetail: '持续了40分钟',
+    name: 'Jigsaw puzzle',
+    search: '5000+',
+    searchUp: '1000',
+    detail: '曼聯對 阿仙奴 阿仙奴曼聯',
+    _24Date: p
   },
   {
-    id: 2,
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    id: '2',
+    begin: '2小时前',
+    beginDetail: '持续了40分钟',
+    name: 'Jigsaw puzzle',
+    search: '5000+',
+    searchUp: '1000',
+    detail: '曼聯對 阿仙奴 阿仙奴曼聯',
+    _24Date: p
   },
   {
-    id: 3,
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    id: '3',
+    begin: '2小时前',
+    beginDetail: '持续了40分钟',
+    name: 'Jigsaw puzzle',
+    search: '5000+',
+    searchUp: '1000',
+    detail: '曼聯對 阿仙奴 阿仙奴曼聯',
+    _24Date: p
   },
   {
-    id: 4,
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    id: '4',
+    begin: '2小时前',
+    beginDetail: '持续了40分钟',
+    name: 'Jigsaw puzzle',
+    search: '5000+',
+    searchUp: '1000',
+    detail: '曼聯對 阿仙奴 阿仙奴曼聯',
+    _24Date: p
   },
   {
-    id: 5,
-    date: '2016-05-08',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    id: '5',
+    begin: '2小时前',
+    beginDetail: '持续了40分钟',
+    name: 'Jigsaw puzzle',
+    search: '5000+',
+    searchUp: '1000',
+    detail: '曼聯對 阿仙奴 阿仙奴曼聯',
+    _24Date: p
   },
   {
-    id: 6,
-    date: '2016-05-06',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    id: '6',
+    begin: '2小时前',
+    beginDetail: '持续了40分钟',
+    name: 'Jigsaw puzzle',
+    search: '5000+',
+    searchUp: '1000',
+    detail: '曼聯對 阿仙奴 阿仙奴曼聯',
+    _24Date: p
   },
   {
-    id: 7,
-    date: '2016-05-07',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    id: '7',
+    begin: '2小时前',
+    beginDetail: '持续了40分钟',
+    name: 'Jigsaw puzzle',
+    search: '5000+',
+    searchUp: '1000',
+    detail: '曼聯對 阿仙奴 阿仙奴曼聯',
+    _24Date: p
   }
 ]
 // 分页
@@ -449,6 +570,7 @@ const handleCurrentChange = (val: number) => {
 import { ElConfigProvider } from 'element-plus'
 // 引入中文包
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import { nbNo } from 'element-plus/es/locale'
 // 更改分页文字
 // zhCn.el.pagination.total = '共 `{total} 条`';
 // zhCn.el.pagination.goto = '跳至';
@@ -559,11 +681,23 @@ watchEffect(
         }
       ]
     })
+    window.addEventListener('resize', () => {
+      echarts.init(document.getElementById('hortTime')).resize()
+    })
   },
   {
     flush: 'post'
   }
 )
+watch(currTab, (n) => {
+  if (n == 2) {
+    nextTick(() => {
+      tableData.forEach((item) => {
+        eChartsInit('chart_' + item.id, item._24Date)
+      })
+    })
+  }
+})
 </script>
 
 <style scoped lang="less">
@@ -595,6 +729,7 @@ watchEffect(
       border: 1px solid #eaecee;
       border-radius: 22px;
       text-align: center;
+      cursor: pointer;
     }
     .is-active {
       background: #f7f7fb;

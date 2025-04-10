@@ -9,7 +9,6 @@ import ElementPLus from 'element-plus'
 import 'element-plus/dist/index.css'
 // import MYRequest from './service'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-
 import { setupStore } from './store'
 
 // MYRequest.post({
