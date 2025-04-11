@@ -1,8 +1,5 @@
 <template>
   <div class="batch page-bg pd_20">
-    <section>
-      <SearchCompare></SearchCompare>
-    </section>
     <section class="search">
       <Search v-model="formInline"></Search>
     </section>

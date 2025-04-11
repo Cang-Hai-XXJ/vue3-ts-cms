@@ -67,6 +67,31 @@ const routes: RouteRecordRaw[] = [
         meta: {
           header: 'search'
         }
+      },
+      {
+        path: 'data/relatedKeywords',
+        name: 'relatedKeywords',
+        component: () => import('@/views/main/dataService/relatedKeywords.vue'),
+        meta: {
+          header: 'search'
+        }
+      },
+      {
+        path: 'data/rankingKeywords',
+        name: 'rankingKeywords',
+        component: () => import('@/views/main/dataService/rankingKeywords.vue'),
+        meta: {
+          header: 'search'
+        }
+      },
+      {
+        path: 'data/competitorSearch',
+        name: 'competitorSearch',
+        component: () =>
+          import('@/views/main/dataService/competitorSearch.vue'),
+        meta: {
+          header: 'search'
+        }
       }
     ]
   },
