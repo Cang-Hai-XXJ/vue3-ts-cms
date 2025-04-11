@@ -1,67 +1,10 @@
 <template>
   <div class="batch page-bg pd_20">
+    <section>
+      <SearchCompare></SearchCompare>
+    </section>
     <section class="search">
-      <el-input
-        v-model="input"
-        style="width: 800px; height: 40px"
-        placeholder="通过关键词、商品名称、商品ID或链接搜索您想要查询的商品"
-        class="input-with-select"
-        size="large"
-      >
-        <template #suffix>
-          <el-button class="btn" size="large" @click="onSubmit"
-            >搜索
-          </el-button>
-        </template>
-      </el-input>
-      <el-form :inline="true" :model="formInline" class="form-inline">
-        <el-form-item label="国家/地区">
-          <el-select
-            v-model="formInline.region"
-            clearable
-            placeholder="国家"
-            style="width: 100px"
-          >
-            <el-option label="上海111" value="shanghai" />
-            <el-option label="北京" value="beijing" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="语言">
-          <el-select
-            v-model="formInline.language"
-            clearable
-            placeholder=""
-            style="width: 100px"
-          >
-            <el-option label="上海" value="shanghai" />
-            <el-option label="北京" value="beijing" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="关联深度">
-          <el-select
-            v-model="formInline.association"
-            clearable
-            placeholder=""
-            style="width: 100px"
-          >
-            <el-option label="上海2222222" value="shanghai" />
-            <el-option label="北京111111111111" value="beijing" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="包含种子关键词">
-          <el-input
-            v-model="formInline.keywords"
-            placeholder="关键词"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="是否忽略同义词">
-          <el-radio-group v-model="formInline.synonym">
-            <el-radio value="1">是</el-radio>
-            <el-radio value="0">否</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
+      <Search v-model="formInline"></Search>
     </section>
     <section class="table">
       <div class="title">XXXX</div>
@@ -92,7 +35,15 @@
     </section>
     <section class="chart">
       <div class="title">关键词搜索量</div>
-      <div class="content" id="chart"></div>
+      <div class="content">
+        <Chart v-model="opt"></Chart>
+      </div>
+    </section>
+    <section class="chart">
+      <div class="title">关键词搜索量</div>
+      <div class="content">
+        <Chart v-model="option"></Chart>
+      </div>
     </section>
   </div>
 </template>
@@ -101,6 +52,9 @@
 import { ComponentSize } from 'element-plus'
 import { computed, ref, reactive, onMounted } from 'vue'
 import * as echarts from 'echarts'
+import Search from './cpns/search.vue'
+import Chart from './cpns/chart.vue'
+import SearchCompare from './cpns/searchCompare.vue'
 
 const tableData = [
   {
@@ -172,49 +126,61 @@ const onSubmit = () => {
 }
 
 //图表
-onMounted(() => {
-  const opt = {
-    color: ['#4040e9'],
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'shadow'
-      }
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis: [
-      {
-        type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        axisTick: {
-          alignWithLabel: true
-        }
-      }
-    ],
-    yAxis: [
-      {
-        type: 'value'
-      }
-    ],
-    series: [
-      {
-        name: 'Direct',
-        type: 'bar',
-        barWidth: '60%',
-        data: [10, 52, 200, 334, 390, 330, 220]
-      }
+const option = {
+  legend: {},
+  tooltip: {},
+  dataset: {
+    dimensions: ['product', '2015', '2016', '2017'],
+    source: [
+      { product: 'Matcha Latte', 2015: 43.3, 2016: 85.8, 2017: 93.7 },
+      { product: 'Milk Tea', 2015: 83.1, 2016: 73.4, 2017: 55.1 },
+      { product: 'Cheese Cocoa', 2015: 86.4, 2016: 65.2, 2017: 82.5 },
+      { product: 'Walnut Brownie', 2015: 72.4, 2016: 53.9, 2017: 39.1 }
     ]
-  }
-  echarts.init(document.getElementById('chart')).setOption(opt)
-  window.addEventListener('resize', () => {
-    echarts.init(document.getElementById('chart')).resize()
-  })
-})
+  },
+  xAxis: { type: 'category' },
+  yAxis: {},
+  // Declare several bar series, each will be mapped
+  // to a column of dataset.source by default.
+  series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }]
+}
+const opt = {
+  color: ['#4040e9'],
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow'
+    }
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  xAxis: [
+    {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      axisTick: {
+        alignWithLabel: true
+      }
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value'
+    }
+  ],
+  series: [
+    {
+      name: 'Direct',
+      type: 'bar',
+      barWidth: '60%',
+      data: [10, 52, 200, 334, 390, 330, 220]
+    }
+  ]
+}
 </script>
 
 <style scoped lang="less">
@@ -235,7 +201,6 @@ onMounted(() => {
     }
   }
   .search {
-    height: 190px;
     .btn {
       width: 90px !important;
       margin-right: -15px;
@@ -259,11 +224,6 @@ onMounted(() => {
   }
   .chart {
     text-align: left;
-    height: 500px;
-    .content {
-      height: 100%;
-      width: 100%;
-    }
   }
 }
 </style>
