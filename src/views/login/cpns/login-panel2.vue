@@ -57,23 +57,25 @@
                     </div>
                   </div>
                 </el-form-item>
+                <el-form-item prop="protocol">
+                  <div class="box-footer">
+                    <el-button
+                      class="login-btn"
+                      type="primary"
+                      @click="loginAction"
+                      @keyDown.enter="loginAction"
+                      >登录</el-button
+                    >
+                    <el-checkbox class="protocol" v-model="userForm.protocol"
+                      >勾选即代表您阅读并同意
+                      <span class="blue">《用户协议》</span>与<span class="blue"
+                        >《隐私政策》</span
+                      >
+                      未注册手机号将自动注册
+                    </el-checkbox>
+                  </div>
+                </el-form-item>
               </el-form>
-            </div>
-            <div class="box-footer">
-              <el-button
-                class="login-btn"
-                type="primary"
-                @click="loginAction"
-                @keyDown.enter="loginAction"
-                >登录</el-button
-              >
-              <el-checkbox class="checked2" v-model="checked2"
-                >勾选即代表您阅读并同意
-                <span class="blue">《用户协议》</span>与<span class="blue"
-                  >《隐私政策》</span
-                >
-                未注册手机号将自动注册
-              </el-checkbox>
             </div>
           </div>
         </section>
@@ -104,7 +106,8 @@ import {
   getCaptchaCode,
   smsLogin,
   sendSms,
-  getWxLoginUrl
+  getWxLoginUrl,
+  register
 } from '@/service/request/login/login'
 import { localCache } from '@/utils/localCache'
 import { BASE_REDIRECT } from '@/service/request/config'
@@ -189,18 +192,21 @@ const loginAction = () => {
     if (valid) {
       validateCode()
         .then(() => {
-          alert(BASE_REDIRECT)
           smsLogin(BASE_REDIRECT, {
             tel: userForm.phone,
             authCode: userForm.authCode,
-            wxInfoId: localCache.getCache('user').wxId
-          }).then((res) => {
-            //token
-            localCache.setCache('token', res.jwtToken.token)
-            // 用户信息
-            localCache.setCache('user', { ...res.user, wxId: res.wxInfoId })
-            router.push('main/index')
+            wxInfoId: localCache.getCache('user')?.wxId
           })
+            .then((res) => {
+              //token
+              localCache.setCache('token', res.jwtToken.token)
+              // 用户信息
+              localCache.setCache('user', { ...res.user, wxId: res.wxInfoId })
+              router.push('main/index')
+            })
+            .catch(() => {
+              ElMessage.error('登陆失败，请稍后重试')
+            })
         })
         .catch((err) => {
           ElMessage.error(err.message)
@@ -214,9 +220,9 @@ const loginAction = () => {
 const userForm = reactive({
   phone: '',
   authCode: '',
-  captchaCode: ''
+  captchaCode: '',
+  protocol: ''
 })
-const checked2 = ref<boolean>()
 const rules = reactive<FormRules>({
   phone: [
     {
@@ -232,16 +238,27 @@ const rules = reactive<FormRules>({
     {
       required: true,
       message: '请输入手机验证码'
-    },
-    {
-      pattern: /^[A-z0-9]{6,12}$/,
-      message: '请输入6到12位数的字母数字组合~'
     }
+    // {
+    //   pattern: /^[A-z0-9]{6,12}$/,
+    //   message: '请输入6到12位数的字母数字组合~'
+    // }
   ],
   captchaCode: [
     {
       required: true,
       message: '请输入图像验证码'
+    }
+  ],
+  protocol: [
+    {
+      validator: (rule, val, cb) => {
+        if (val) {
+          cb()
+        } else {
+          cb(new Error('请勾选同意协议!'))
+        }
+      }
     }
   ]
 })
@@ -324,6 +341,9 @@ const inputStyle2 = {
   section {
     width: 100%;
     height: 500px;
+  }
+  .box-footer {
+    margin-top: 30px;
   }
   .wx-login {
     display: flex;
@@ -423,7 +443,7 @@ const inputStyle2 = {
         .blue {
           color: var(--main-color);
         }
-        .checked2 {
+        .protocol {
           position: relative;
           top: 10px;
           white-space: break-spaces;

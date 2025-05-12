@@ -68,7 +68,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'submit'])
 const formData = reactive({ ...props.modelValue })
 
 watch(
@@ -83,7 +83,7 @@ watch(
 //
 const input = ref('')
 const onSubmit = () => {
-  console.log('submit!')
+  emit('submit')
 }
 </script>
 

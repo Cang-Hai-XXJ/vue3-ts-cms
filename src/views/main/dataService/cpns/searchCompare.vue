@@ -1,10 +1,10 @@
 <template>
   <div class="search">
     <div class="flex gap-2">
-      <div>
+      <div class="flex-line">
         <span>关键词</span>
         <el-tag
-          v-for="(tag, index) in dynamicTags"
+          v-for="(tag, index) in formData.keywords"
           class="tag"
           :key="tag"
           closable
@@ -26,7 +26,7 @@
           @blur="handleInputConfirm"
         />
         <el-button
-          v-else-if="!inputValue && dynamicTags.length < 3"
+          v-else-if="!inputValue && formData.keywords.length < maxLength"
           class="button-new-tag"
           @click="showInput"
         >
@@ -36,26 +36,34 @@
       </div>
       <div>
         <el-form :inline="true" :model="formData" class="form-inline">
-          <el-form-item label="国家/地区">
+          <el-form-item label="地区">
             <el-select
               v-model="formData.region"
               clearable
-              placeholder="国家"
-              style="width: 100px"
+              placeholder="请选择地区"
+              style="width: 150px"
             >
-              <el-option label="上海111" value="shanghai" />
-              <el-option label="北京" value="beijing" />
+              <el-option
+                v-for="item of locationOptions"
+                :key="item"
+                :label="item.locationName"
+                :value="item.locationCode"
+              />
             </el-select>
           </el-form-item>
           <el-form-item label="语言">
             <el-select
               v-model="formData.language"
               clearable
-              placeholder=""
-              style="width: 100px"
+              placeholder="请选择语言"
+              style="width: 150px"
             >
-              <el-option label="上海" value="shanghai" />
-              <el-option label="北京" value="beijing" />
+              <el-option
+                v-for="item of languageOptions"
+                :key="item"
+                :label="item.languageName"
+                :value="item.languageCode"
+              />
             </el-select>
           </el-form-item>
         </el-form>
@@ -68,43 +76,24 @@
 import { ref, reactive, watch, nextTick } from 'vue'
 import type { InputInstance } from 'element-plus'
 import { themeColors } from '@/config/constant'
+import { getLocations, getLanguages } from '@/service/request/dataService'
+import {
+  GetLanguagesRes,
+  GetLocationsRes
+} from '@/service/request/dataService/type'
 
-const inputValue = ref('')
-const dynamicTags = ref([])
-const inputVisible = ref(false)
-const InputRef = ref<InputInstance>()
-
-const handleClose = (tag: string) => {
-  dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
-}
-
-const showInput = () => {
-  inputVisible.value = true
-  nextTick(() => {
-    InputRef.value!.input!.focus()
-  })
-}
-
-const submit = () => {
-  console.log(1)
-}
-
-const handleInputConfirm = () => {
-  if (inputValue.value) {
-    dynamicTags.value.push(inputValue.value)
-  }
-  inputVisible.value = false
-  inputValue.value = ''
-}
 const props = defineProps({
   modelValue: {
     type: Object,
     default: () => ({}),
     require: true
+  },
+  maxLength: {
+    type: Number,
+    default: 10
   }
 })
-
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'submit'])
 const formData = reactive({ ...props.modelValue })
 
 watch(
@@ -115,6 +104,42 @@ watch(
   },
   { deep: true }
 )
+const inputValue = ref('')
+// const formData.keywords = ref<string[]>([])
+const inputVisible = ref(false)
+const InputRef = ref<InputInstance>()
+const languageOptions = ref<GetLanguagesRes[]>()
+const locationOptions = ref<GetLocationsRes[]>()
+getLocations('').then((res) => {
+  // console.log(res)
+  locationOptions.value = res
+})
+getLanguages('').then((res) => {
+  languageOptions.value = res
+})
+
+const handleClose = (tag: string) => {
+  formData.keywords.splice(formData.keywords.indexOf(tag), 1)
+}
+
+const showInput = () => {
+  inputVisible.value = true
+  nextTick(() => {
+    InputRef.value!.input!.focus()
+  })
+}
+
+const submit = () => {
+  emit('submit')
+}
+
+const handleInputConfirm = () => {
+  if (inputValue.value) {
+    formData.keywords.push(inputValue.value)
+  }
+  inputVisible.value = false
+  inputValue.value = ''
+}
 </script>
 
 <style lang="less" scoped>
@@ -123,13 +148,19 @@ watch(
   height: 140px;
   text-align: left;
   margin-left: 20px;
+  .flex-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
   span {
     color: #4b5563;
     font-size: 14px;
-    margin-right: 20px;
+    // margin-right: 20px;
   }
   .tag {
-    margin-right: 20px;
+    margin-right: 5px;
   }
   .el-form-item {
     margin-bottom: 0;

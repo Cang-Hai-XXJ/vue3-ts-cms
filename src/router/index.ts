@@ -106,15 +106,15 @@ const router = createRouter({
   history: createWebHashHistory()
 })
 
-// router.beforeEach((to: any) => {
-//   if (to.path !== '/login') {
-//     const token = localCache.getCache('token')
-//     if (!token) {
-//       return '/login'
-//     }
-//   }
-//   if (to.path === '/main') {
-//     return firstMenu.url
-//   }
-// })
+router.beforeEach((to: any) => {
+  // if (to.path !== '/login') {
+  //   const token = localCache.getCache('token')
+  //   if (!token) {
+  //     return '/login'
+  //   }
+  // }
+  if (to.path === '/main') {
+    return firstMenu.url
+  }
+})
 export default router
