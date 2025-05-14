@@ -85,10 +85,18 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
-        path: 'data/competitorSearch',
-        name: 'competitorSearch',
+        path: 'data/populationAnalysis',
+        name: 'populationAnalysis',
         component: () =>
-          import('@/views/main/dataService/competitorSearch.vue'),
+          import('@/views/main/dataService/populationAnalysis.vue'),
+        meta: {
+          header: 'search'
+        }
+      },
+      {
+        path: 'data/rankingSearch',
+        name: 'rankingSearch',
+        component: () => import('@/views/main/dataService/rankingSearch.vue'),
         meta: {
           header: 'search'
         }

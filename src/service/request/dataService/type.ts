@@ -244,3 +244,555 @@ export interface AmazonRankedKeywordsLiveRes {
   }[]
   additionalProperties: Record<string, unknown>
 }
+
+// 参数接口
+export interface AmazonRelatedKeywordsLiveParams {
+  /* */
+  keyword?: string
+
+  /* */
+  locationName?: string
+
+  /* */
+  locationCode?: number
+
+  /* */
+  languageName?: string
+
+  /* */
+  languageCode?: string
+
+  /* */
+  depth?: number
+
+  /*是否包含种子关键词 */
+  includeSeedKeyword?: boolean
+
+  /* */
+  ignoreSynonyms?: boolean
+
+  /* */
+  limit?: number
+
+  /* */
+  offset?: number
+
+  /* */
+  tag?: string
+
+  /* */
+  additionalProperties?: Record<string, unknown>
+}
+
+// 响应接口
+export interface AmazonRelatedKeywordsLiveRes {
+  /* */
+  version: string
+
+  /* */
+  statusCode: number
+
+  /* */
+  statusMessage: string
+
+  /* */
+  time: string
+
+  /* */
+  cost: Record<string, unknown>
+
+  /* */
+  tasksCount: number
+
+  /* */
+  tasksError: number
+
+  /* */
+  tasks: {
+    /* */
+    id: string
+
+    /* */
+    statusCode: number
+
+    /* */
+    statusMessage: string
+
+    /* */
+    time: string
+
+    /* */
+    cost: Record<string, unknown>
+
+    /* */
+    resultCount: number
+
+    /* */
+    path: Record<string, unknown>[]
+
+    /* */
+    data: string
+
+    /* */
+    result: {
+      /* */
+      seType: string
+
+      /*种子关键词 */
+      seedKeyword: string
+
+      /*种子关键词数据 */
+      seedKeywordData: {
+        /*搜索平台类型 */
+        seType: string
+
+        /*搜索关键词 */
+        keyword: string
+
+        /*地域编码 */
+        locationCode: number
+
+        /*语言编码 */
+        languageCode: string
+
+        /*关键词信息 */
+        keywordInfo: {
+          /*搜索平台类型 */
+          seType: string
+
+          /*最后更新时间 */
+          lastUpdatedTime: string
+
+          /*搜索量 */
+          searchVolume: number
+
+          /*额外参数 */
+          additionalProperties: Record<string, unknown>
+        }
+
+        /*额外参数 */
+        additionalProperties: Record<string, unknown>
+      }
+
+      /* */
+      locationCode: number
+
+      /* */
+      languageCode: string
+
+      /* */
+      totalCount: number
+
+      /* */
+      itemsCount: number
+
+      /* */
+      items: {
+        /* */
+        seType: string
+
+        /*关键词数据 */
+        keywordData: {
+          /*搜索平台类型 */
+          seType: string
+
+          /*搜索关键词 */
+          keyword: string
+
+          /*地域编码 */
+          locationCode: number
+
+          /*语言编码 */
+          languageCode: string
+
+          /*关键词信息 */
+          keywordInfo: {
+            /*搜索平台类型 */
+            seType: string
+
+            /*最后更新时间 */
+            lastUpdatedTime: string
+
+            /*搜索量 */
+            searchVolume: number
+
+            /*额外参数 */
+            additionalProperties: Record<string, unknown>
+          }
+
+          /*额外参数 */
+          additionalProperties: Record<string, unknown>
+        }
+
+        /*搜索深度 */
+        depth: number
+
+        /*相关关键词 */
+        relatedKeywords: Record<string, unknown>[]
+
+        /* */
+        additionalProperties: Record<string, unknown>
+      }[]
+
+      /* */
+      additionalProperties: Record<string, unknown>
+    }[]
+
+    /* */
+    additionalProperties: Record<string, unknown>
+  }[]
+
+  /* */
+  additionalProperties: Record<string, unknown>
+}
+
+// 参数接口
+export interface DataforseoTrendsDemographyLiveParams {
+  /*关键词 */
+  keywords?: string[]
+
+  /*地域名称 */
+  locationName?: string
+
+  /*地域编码 */
+  locationCode?: number
+
+  /*类型,web/news/ecommerce,默认web */
+  type?: string
+
+  /*开始日期 */
+  dateFrom?: string
+
+  /*结束日期 */
+  dateTo?: string
+
+  /*时间范围 */
+  timeRange?: string
+
+  /*标签 */
+  tag?: string
+}
+
+// 响应接口
+export interface DataforseoTrendsDemographyLiveRes {
+  /* */
+  version: string
+
+  /* */
+  statusCode: number
+
+  /* */
+  statusMessage: string
+
+  /* */
+  time: string
+
+  /* */
+  cost: Record<string, unknown>
+
+  /* */
+  tasksCount: number
+
+  /* */
+  tasksError: number
+
+  /* */
+  tasks: {
+    /* */
+    id: string
+
+    /* */
+    statusCode: number
+
+    /* */
+    statusMessage: string
+
+    /* */
+    time: string
+
+    /* */
+    cost: Record<string, unknown>
+
+    /* */
+    resultCount: number
+
+    /* */
+    path: Record<string, unknown>[]
+
+    /* */
+    data: string
+
+    /* */
+    result: {
+      /* */
+      keywords: Record<string, unknown>[]
+
+      /* */
+      type: string
+
+      /* */
+      locationCode: number
+
+      /* */
+      languageCode: string
+
+      /* */
+      datetime: string
+
+      /* */
+      itemsCount: number
+
+      /* */
+      items: {
+        /*位置 */
+        position: number
+
+        /*类型 */
+        type: string
+
+        /*关键词列表 */
+        keywords: string[]
+
+        /*人口信息 */
+        demography: {
+          /*年龄 */
+          age: {
+            /*关键词 */
+            keyword: string
+
+            /* */
+            values: {
+              /* */
+              type: string
+
+              /* */
+              value: number
+
+              /* */
+              additionalProperties: Record<string, unknown>
+            }[]
+
+            /* */
+            additionalProperties: Record<string, unknown>
+          }[]
+
+          /*性别 */
+          gender: {
+            /*关键词 */
+            keyword: string
+
+            /* */
+            values: {
+              /* */
+              type: string
+
+              /* */
+              value: number
+
+              /* */
+              additionalProperties: Record<string, unknown>
+            }[]
+
+            /* */
+            additionalProperties: Record<string, unknown>
+          }[]
+
+          /*额外属性 */
+          additionalProperties: Record<string, unknown>
+        }
+
+        /*人口比较 */
+        demographyComparison: {
+          /*年龄 */
+          age: any
+
+          /*性别 */
+          gender: any
+
+          /* */
+          additionalProperties: Record<string, unknown>
+        }
+
+        /*额外属性 */
+        additionalProperties: Record<string, unknown>
+      }[]
+
+      /* */
+      additionalProperties: Record<string, unknown>
+    }[]
+
+    /* */
+    additionalProperties: Record<string, unknown>
+  }[]
+}
+
+// 参数接口
+export interface AmazonProductRankOverviewLiveParams {
+  /*ASIN列表 */
+  asins?: string[]
+
+  /*地域名称 */
+  locationName?: string
+
+  /*地域编码 */
+  locationCode?: number
+
+  /*语言名称 */
+  languageName?: string
+
+  /*语言编码 */
+  languageCode?: string
+
+  /*标签 */
+  tag?: string
+
+  /*额外参数 */
+  additionalProperties?: Record<string, unknown>
+}
+
+// 响应接口
+export interface AmazonProductRankOverviewLiveRes {
+  /* */
+
+  /* */
+  /*版本 */
+  version: string
+
+  /*状态码 */
+  statusCode: number
+
+  /*状态信息 */
+  statusMessage: string
+
+  /*时间 */
+  time: string
+
+  /*成本花销 */
+  cost: Record<string, unknown>
+
+  /*任务数量 */
+  tasksCount: number
+
+  /*任务错误 */
+  tasksError: number
+
+  /*任务列表 */
+  tasks: {
+    /* */
+    id: string
+
+    /* */
+    statusCode: number
+
+    /* */
+    statusMessage: string
+
+    /* */
+    time: string
+
+    /* */
+    cost: Record<string, unknown>
+
+    /* */
+    resultCount: number
+
+    /* */
+    path: Record<string, unknown>[]
+
+    /* */
+    data: string
+
+    /* */
+    result: {
+      /*搜索平台类型 */
+      seType: string
+
+      /*地域编码 */
+      locationCode: number
+
+      /*语言编码 */
+      languageCode: string
+
+      /*总量 */
+      totalCount: number
+
+      /*数量 */
+      itemsCount: number
+
+      /*搜索明细 */
+      items: {
+        /*搜索平台类型 */
+        seType: string
+
+        /*ASIN */
+        asin: string
+
+        /*指标 */
+        metrics: {
+          /*amazon serp */
+          amazonSerp: {
+            /*位置第一位 */
+            pos1: number
+
+            /*位置第二至三位 */
+            pos23: number
+
+            /*位置第四至十位 */
+            pos410: number
+
+            /*位置第十一至一百位 */
+            pos11100: number
+
+            /*数量 */
+            count: number
+
+            /*搜索量 */
+            searchVolume: number
+
+            /*额外属性 */
+            additionalProperties: Record<string, unknown>
+          }
+
+          /*amazon paid */
+          amazonPaid: {
+            /*位置第一位 */
+            pos1: number
+
+            /*位置第二至三位 */
+            pos23: number
+
+            /*位置第四至十位 */
+            pos410: number
+
+            /*位置第十一至一百位 */
+            pos11100: number
+
+            /*数量 */
+            count: number
+
+            /*搜索量 */
+            searchVolume: number
+
+            /*额外属性 */
+            additionalProperties: Record<string, unknown>
+          }
+
+          /* */
+          additionalProperties: Record<string, unknown>
+        }
+
+        /*额外属性 */
+        additionalProperties: Record<string, unknown>
+      }[]
+
+      /*额外属性 */
+      additionalProperties: Record<string, unknown>
+    }[]
+
+    /* */
+    additionalProperties: Record<string, unknown>
+  }[]
+
+  /*额外属性 */
+  additionalProperties: Record<string, unknown>
+}

@@ -62,10 +62,16 @@ const loginModules: Module<ILoginState, IRootState> = {
               url: '/main/data/rankingKeywords'
             },
             {
-              name: '竞品查询',
+              name: '产品排名查询',
               type: 1,
               id: 14,
-              url: '/main/data/competitorSearch'
+              url: '/main/data/rankingSearch'
+            },
+            {
+              name: '人口分析',
+              type: 1,
+              id: 15,
+              url: '/main/data/populationAnalysis'
             }
           ]
         },

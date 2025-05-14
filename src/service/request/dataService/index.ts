@@ -2,8 +2,14 @@ import { default as request } from '../../index'
 import {
   AmazonBulkSearchVolumeLiveParams,
   AmazonBulkSearchVolumeLiveRes,
+  AmazonProductRankOverviewLiveParams,
+  AmazonProductRankOverviewLiveRes,
   AmazonRankedKeywordsLiveParams,
   AmazonRankedKeywordsLiveRes,
+  AmazonRelatedKeywordsLiveParams,
+  AmazonRelatedKeywordsLiveRes,
+  DataforseoTrendsDemographyLiveParams,
+  DataforseoTrendsDemographyLiveRes,
   GetLanguagesRes,
   GetLocationsRes
 } from './type'
@@ -67,4 +73,67 @@ export function amazonRankedKeywordsLive(
   params: AmazonRankedKeywordsLiveParams
 ): Promise<AmazonRankedKeywordsLiveRes> {
   return request.post(`/v1/datahub/amazon_ranked_keywords`, params)
+}
+
+/**
+ * 亚马逊关联关键词
+ * @param {object} params AmazonRelatedKeywordsLiveRequest
+ * @param {string} params.keyword
+ * @param {string} params.locationName
+ * @param {number} params.locationCode
+ * @param {string} params.languageName
+ * @param {string} params.languageCode
+ * @param {number} params.depth
+ * @param {boolean} params.includeSeedKeyword 是否包含种子关键词
+ * @param {boolean} params.ignoreSynonyms
+ * @param {number} params.limit
+ * @param {number} params.offset
+ * @param {string} params.tag
+ * @param {object} params.additionalProperties
+ * @returns
+ */
+export function amazonRelatedKeywordsLive(
+  params: AmazonRelatedKeywordsLiveParams[]
+): Promise<AmazonRelatedKeywordsLiveRes> {
+  return request.post(`/v1/datahub/amazon_batch_search`, params)
+}
+
+/**
+ * 搜索引擎 - 人口趋势 最多关键词5
+ * @param {object} params TrendsDemographyLiveRequest
+ * @param {array} params.keywords 关键词
+ * @param {string} params.locationName 地域名称
+ * @param {number} params.locationCode 地域编码
+ * @param {string} params.type 类型,web/news/ecommerce,默认web
+ * @param {string} params.dateFrom 开始日期
+ * @param {string} params.dateTo 结束日期
+ * @param {string} params.timeRange 时间范围
+ * @param {string} params.tag 标签
+ * @returns
+ */
+export function dataforseoTrendsDemographyLive(
+  params: DataforseoTrendsDemographyLiveParams[]
+): Promise<DataforseoTrendsDemographyLiveRes> {
+  return request.post(
+    `/v1/datahub/keywords_dataforseo_trends_demography_live`,
+    params
+  )
+}
+
+/**
+ * 亚马逊产品比较，最多为1000
+ * @param {object} params AmazonProductRankOverviewLiveRequest
+ * @param {array} params.asins ASIN列表
+ * @param {string} params.locationName 地域名称
+ * @param {number} params.locationCode 地域编码
+ * @param {string} params.languageName 语言名称
+ * @param {string} params.languageCode 语言编码
+ * @param {string} params.tag 标签
+ * @param {object} params.additionalProperties 额外参数
+ * @returns
+ */
+export function amazonProductRankOverviewLive(
+  params: AmazonProductRankOverviewLiveParams[]
+): Promise<AmazonProductRankOverviewLiveRes> {
+  return request.post(`/v1/datahub/amazon_product_rank_overview`, params)
 }

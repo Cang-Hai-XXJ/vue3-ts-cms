@@ -7,7 +7,12 @@
       <div class="title"></div>
       <div class="content">
         <el-table :data="tableData" style="width: 100%">
-          <el-table-column align="center" type="index" label="序号" />
+          <el-table-column
+            align="center"
+            type="index"
+            width="100"
+            label="序号"
+          />
           <el-table-column align="center" prop="keyword" label="关键词" />
           <el-table-column align="center" prop="searchVolume" label="搜索量" />
           <el-table-column align="center" prop="seType" label="搜索平台" />
@@ -91,7 +96,7 @@ const opt = reactive({
 })
 const loaded = ref(false)
 const formInline = ref({
-  region: '2840',
+  region: 2840,
   language: 'en',
   keywords: [
     'book',

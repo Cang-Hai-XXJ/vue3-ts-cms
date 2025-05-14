@@ -1,4 +1,11 @@
-class LocalCache {
+interface IMethods {
+  setCache: (key: string, val: any) => void
+  getCache: (key: string) => void
+  clearCache: () => void
+  deleteCache: (key: string) => void
+}
+
+class LocalCache implements IMethods {
   setCache(key: string, val: any) {
     window.localStorage.setItem(key, JSON.stringify(val))
   }
@@ -16,7 +23,7 @@ class LocalCache {
   }
 }
 
-class SessionCache {
+class SessionCache implements IMethods {
   setCache(key: string, val: any) {
     window.sessionStorage.setItem(key, JSON.stringify(val))
   }

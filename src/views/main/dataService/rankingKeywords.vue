@@ -3,6 +3,33 @@
     <section>
       <Search></Search>
     </section>
+    <section class="table">
+      <div class="title"></div>
+      <div class="content">
+        <el-table :data="tableData" style="width: 100%">
+          <el-table-column
+            align="center"
+            type="index"
+            width="100"
+            label="序号"
+          />
+          <el-table-column
+            align="center"
+            prop="keyword"
+            label="绝对排名/相对排名"
+          />
+          <el-table-column
+            align="center"
+            prop="searchVolume"
+            label="查询ID
+"
+          />
+          <el-table-column align="center" prop="seType" label="关键词信息" />
+          <el-table-column align="center" prop="seType" label="排名信息" />
+        </el-table>
+      </div>
+    </section>
+
     <section class="chart">
       <div class="title">关键词搜索量</div>
       <div class="content">
@@ -54,7 +81,12 @@
 import { ref } from 'vue'
 import type { TagProps } from 'element-plus'
 type Item = { type: TagProps['type']; label: string; icon?: string }
-
+interface ItableData {
+  keyword: string
+  seType: string
+  searchVolume: number
+}
+const tableData = ref<ItableData[]>()
 import Search from './cpns/search.vue'
 
 const handleCurrentChange = (val: number) => {
