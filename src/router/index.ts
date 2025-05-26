@@ -94,6 +94,14 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
+        path: 'data/ChromeAnalysis',
+        name: 'ChromeAnalysis',
+        component: () => import('@/views/main/dataService/ChromeAnalysis.vue'),
+        meta: {
+          header: 'search'
+        }
+      },
+      {
         path: 'data/rankingSearch',
         name: 'rankingSearch',
         component: () => import('@/views/main/dataService/rankingSearch.vue'),

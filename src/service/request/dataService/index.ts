@@ -11,7 +11,9 @@ import {
   DataforseoTrendsDemographyLiveParams,
   DataforseoTrendsDemographyLiveRes,
   GetLanguagesRes,
-  GetLocationsRes
+  GetLocationsRes,
+  GoogleTrendsExploreTaskPostParams,
+  GoogleTrendsExploreTaskPostRes
 } from './type'
 
 /**
@@ -136,4 +138,26 @@ export function amazonProductRankOverviewLive(
   params: AmazonProductRankOverviewLiveParams[]
 ): Promise<AmazonProductRankOverviewLiveRes> {
   return request.post(`/v1/datahub/amazon_product_rank_overview`, params)
+}
+/**
+ * 搜索引擎 - 关键词趋势
+ * @param {object} params GoogleTrendsExploreTaskPostRequest
+ * @param {array} params.keywords
+ * @param {array} params.locationName
+ * @param {array} params.locationCode
+ * @param {string} params.languageName
+ * @param {string} params.languageCode
+ * @param {string} params.type
+ * @param {number} params.categoryCode 类别编码,https://api.dataforseo.com/v3/keywords_data/google_trends/categories
+ * @param {string} params.dateFrom
+ * @param {string} params.dateTo
+ * @param {string} params.timeRange
+ * @param {array} params.itemTypes 数据项类型,google_trends_graph(默认), google_trends_map, google_trends_topics_list, google_trends_queries_list
+ * @param {string} params.tag
+ * @returns
+ */
+export function googleTrendsExploreTaskPost(
+  params: GoogleTrendsExploreTaskPostParams[]
+): Promise<GoogleTrendsExploreTaskPostRes> {
+  return request.post(`/v1/datahub/google_trends_explore_task`, params)
 }

@@ -68,6 +68,12 @@ const loginModules: Module<ILoginState, IRootState> = {
               url: '/main/data/rankingSearch'
             },
             {
+              name: '谷歌趋势分析',
+              type: 1,
+              id: 16,
+              url: '/main/data/ChromeAnalysis'
+            },
+            {
               name: '人口分析',
               type: 1,
               id: 15,

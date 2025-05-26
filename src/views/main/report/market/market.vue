@@ -59,23 +59,33 @@
         </div>
         <div class="content">
           <el-card
-            v-for="item of new Array(12)"
+            v-for="item of reports"
             :key="item"
             class="el-card"
             shadow="hover"
             @click="gotoDetail(item)"
           >
+            <el-icon class="view"
+              ><View /><span class="text"
+                >&nbsp;{{
+                  item.reportUserBehaviorSummaryResponse?.view || '22w'
+                }}</span
+              ></el-icon
+            >
             <img
               src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
             />
             <template #footer>
               <div class="header">
-                2025年中国新能源汽车行业深度研究报告2025年中国新能源汽车行业深度研究报告
+                {{ item.reportTitle }}
               </div>
               <div class="footer">
-                <div>2025-01-15</div>
+                <div>{{ item.createTime?.split(' ')[0] }}</div>
                 <div>
-                  <el-icon><Star /></el-icon>202
+                  <el-icon><Star /></el-icon
+                  >{{ item.reportUserBehaviorSummaryResponse?.follow || 11 }}
+                  <el-icon><Pointer /></el-icon
+                  >{{ item.reportUserBehaviorSummaryResponse?.thumbUp || 12 }}
                 </div>
               </div>
             </template>
@@ -97,6 +107,8 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import router from '@/router'
+import { getReportPage } from '@/service/request/report'
+import { ViewRes } from '@/service/request/report/type'
 
 const arr = reactive([
   {
@@ -186,9 +198,16 @@ const arr = reactive([
     ]
   }
 ])
+
 const currPage = ref(1)
-const totalPage = ref(500)
-const currSelected = ref(0)
+const totalPage = ref(0)
+
+const reports = ref<ViewRes[]>([])
+getReportPage(currPage.value, 12, {}).then((res) => {
+  reports.value = res.records
+  totalPage.value = res.total
+  console.log(reports.value)
+})
 type sortType = 'price' | 'time'
 
 const changeColor = (element: any, i: any) => {
@@ -215,7 +234,7 @@ const ascending = (type: sortType, event: any) => {
   }
 }
 const gotoDetail = (item: any) => {
-  router.push(`marketDetail/${item?.id}`)
+  router.push(`marketDetail/${item?.reportId}`)
 }
 const descending = (type: sortType, event: any) => {
   event.target.style.color = '#4169E1'
@@ -324,9 +343,26 @@ const descending = (type: sortType, event: any) => {
         flex-wrap: wrap;
         gap: 10px;
         .el-card {
+          position: relative;
           width: 260px;
           :hover {
             cursor: pointer;
+          }
+          .view {
+            .text {
+              font-size: 14px;
+              font-style: normal;
+            }
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            z-index: 9;
+            background: #000;
+            color: #fff;
+            width: 84px;
+            height: 28px;
+            border-radius: 84px;
+            opacity: 0.7;
           }
           img {
             width: 100%;
