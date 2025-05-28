@@ -67,14 +67,10 @@
           >
             <el-icon class="view"
               ><View /><span class="text"
-                >&nbsp;{{
-                  item.reportUserBehaviorSummaryResponse?.view || '22w'
-                }}</span
+                >&nbsp;{{ item.reportUserBehaviorSummaryResponse?.view }}</span
               ></el-icon
             >
-            <img
-              src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-            />
+            <img referrerPolicy="no-referrer" :src="item.reportCover" />
             <template #footer>
               <div class="header">
                 {{ item.reportTitle }}
@@ -83,9 +79,9 @@
                 <div>{{ item.createTime?.split(' ')[0] }}</div>
                 <div>
                   <el-icon><Star /></el-icon
-                  >{{ item.reportUserBehaviorSummaryResponse?.follow || 11 }}
+                  >{{ item.reportUserBehaviorSummaryResponse?.follow }}
                   <el-icon><Pointer /></el-icon
-                  >{{ item.reportUserBehaviorSummaryResponse?.thumbUp || 12 }}
+                  >{{ item.reportUserBehaviorSummaryResponse?.thumbUp }}
                 </div>
               </div>
             </template>
@@ -202,13 +198,13 @@ const arr = reactive([
 const currPage = ref(1)
 const totalPage = ref(0)
 
+import { sortType } from '@/utils/enum'
 const reports = ref<ViewRes[]>([])
 getReportPage(currPage.value, 12, {}).then((res) => {
   reports.value = res.records
   totalPage.value = res.total
   console.log(reports.value)
 })
-type sortType = 'price' | 'time'
 
 const changeColor = (element: any, i: any) => {
   document.querySelectorAll('.filter .content').forEach((item: any) => {

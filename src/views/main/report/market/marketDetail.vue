@@ -21,13 +21,14 @@
         <div>{{ report?.reportType }}</div>
       </div>
       <iframe
+        v-if="report?.reportUrl"
         id="bi_iframe"
         style="width: 100%; height: 700px"
         class="content"
         :src="report?.reportUrl"
         frameborder="0"
       ></iframe>
-
+      <img v-else style="width: 100%; height: 700px" />
       <div class="footer">
         <div class="left">此报告还剩88页，如需下载请订阅。</div>
         <div class="right">
@@ -83,7 +84,9 @@
           收藏&nbsp;{{ report?.reportUserBehaviorSummaryResponse.follow }}
         </div>
         <div>
-          <img src="~@/assets/img/评论@1x.png" class="myIcon" />99条评论
+          <img src="~@/assets/img/评论@1x.png" class="myIcon" />{{
+            replyNum
+          }}条评论
         </div>
       </section>
       <section class="comments">
@@ -98,9 +101,11 @@
         </div>
         <div class="reply">
           <div class="reply_box" v-for="(item, index) in replies" :key="index">
-            <img class="reply_left" :src="item.userImages" />
+            <img class="reply_left" :src="item.userAvatarUrl" />
             <div class="reply_right">
-              <div class="name">{{ item.userId }}</div>
+              <div class="name">
+                {{ item.userNickName || `用户${item.userId}` }}
+              </div>
               <div class="desc">{{ item.userWords }}</div>
               <div class="hint">{{ item.updateTime }}</div>
               <div
@@ -112,23 +117,34 @@
                 <span v-if="cur !== item.userWordsId">回复</span>
                 <span v-else>取消回复</span>
               </div>
+              <!-- <div class="flex"> -->
               <el-input
                 v-if="showInput && cur == item.userWordsId"
                 v-model="input1"
                 autosize
                 maxlength="500"
                 style="width: 640px; height: 36px"
-                placeholder="理性发言，友善互动"
+                placeholder="理性发言，友善互动，按Enter回复"
                 @keyup.enter="handleClickReplyUser(item.userWordsId)"
               />
+              <!-- <el-button
+                  style="width: 80px !important; height: 35px"
+                  class="btn"
+                  @click="handleClickReply"
+                  >回复</el-button
+                > -->
+              <!-- </div> -->
+
               <div
                 class="reply_box"
                 v-for="(item_sub, index) in item.children"
                 :key="index"
               >
-                <img class="reply_left" :src="item_sub.userImages" />
+                <img class="reply_left" :src="item_sub.userAvatarUrl" />
                 <div class="reply_right">
-                  <div class="name">{{ item_sub.userId }}</div>
+                  <div class="name">
+                    {{ item_sub.userNickName || `用户${item_sub.userId}` }}
+                  </div>
                   <div class="desc">{{ item_sub.userWords }}</div>
                   <div class="hint">{{ item_sub.updateTime }}</div>
                   <div
@@ -146,7 +162,7 @@
                     autosize
                     maxlength="500"
                     style="width: 640px; height: 36px"
-                    placeholder="理性发言，友善互动"
+                    placeholder="理性发言，友善互动，按Enter回复"
                     @keyup.enter="handleClickReplyUser(item_sub.userWordsId)"
                   />
                 </div>
@@ -303,9 +319,11 @@ getReport(id.value as any).then((res) => {
   })
 })
 
+const replyNum = ref(0)
 // TODO 分页
 getUserWords(1, 10, id.value as any).then((res) => {
   replies.value = res.records
+  replyNum.value = res.total
 })
 import { ElMessage } from 'element-plus'
 const handleClickReply = () => {
@@ -314,13 +332,19 @@ const handleClickReply = () => {
     reportId: id.value,
     userWords: input.value,
     userImages: []
-  }).then((res) => {
-    if (res) {
-      getUserWords(1, 10, id.value as any).then((res) => {
-        replies.value = res.records
-      })
-    }
   })
+    .then((res) => {
+      ElMessage.success('评论成功')
+      input.value = ''
+      if (res) {
+        getUserWords(1, 10, id.value as any).then((res) => {
+          replies.value = res.records
+        })
+      }
+    })
+    .catch((err) => {
+      ElMessage.error(err.message)
+    })
 }
 const handleClickReplyUser = (parentId: any) => {
   if (input1.value.trim() === '') return ElMessage.warning('请输入评论内容')
@@ -329,15 +353,22 @@ const handleClickReplyUser = (parentId: any) => {
     parentId: parentId,
     userWords: input1.value,
     userImages: []
-  }).then((res) => {
-    if (res) {
-      input1.value = ''
-      showInput.value = false
-      getUserWords(1, 10, id.value as any).then((res) => {
-        replies.value = res.records
-      })
-    }
   })
+    .then((res) => {
+      if (res) {
+        ElMessage.success('回复成功')
+
+        input1.value = ''
+        cur.value = ''
+        showInput.value = false
+        getUserWords(1, 10, id.value as any).then((res) => {
+          replies.value = res.records
+        })
+      }
+    })
+    .catch((err) => {
+      ElMessage.error(err.message)
+    })
 }
 const showInput = ref(false)
 const cur = ref<any>()
@@ -460,7 +491,7 @@ const turnToDetail = (i: any) => {
   }
   .comments {
     width: 100%;
-    margin-top: 20px;
+    // margin-top: 20px;
     // padding: 20 0px;
     .title {
       height: 60px;

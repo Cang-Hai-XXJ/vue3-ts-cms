@@ -280,7 +280,11 @@ export interface GetSubUserWordsRes {
 export interface UserWords {
   /*用户ID */
   userId: number
+  /*用户昵称 */
+  userNickName: string
 
+  /*用户头像 */
+  userAvatarUrl: string
   /*报告ID */
   reportId: number
 
