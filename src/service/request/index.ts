@@ -1,3 +1,4 @@
+import router from '@/router'
 import axios from 'axios'
 import type {
   AxiosInstance,
@@ -5,7 +6,7 @@ import type {
   AxiosRequestConfig,
   AxiosResponse
 } from 'axios'
-import { ElLoading } from 'element-plus'
+import { ElLoading, ElMessage } from 'element-plus'
 // import { ILoadingInstance } from 'element-plus/lib/el-loading/src/loading.type'
 
 interface RequestInterceptors<T = AxiosResponse> {
@@ -66,7 +67,7 @@ class MYRequest {
         // returnCode 类型错误拦截
         const { data } = res.data
         if (res.data?.success === false) {
-          console.log('请求失败')
+          ElMessage.error('请求失败')
           return res.data
         } else {
           return data
@@ -74,8 +75,11 @@ class MYRequest {
       },
       (err) => {
         // HttpErrorCode 类型错误拦截
-        if (err.response.status !== 200) {
-          console.log('请求失败')
+        if (err.response.status == 401) {
+          ElMessage.error('登录失效，请重新登录')
+          router.push(`/login`)
+        } else {
+          ElMessage.error('服务异常，请稍后再试！')
         }
 
         // console.log('所有实例响应失败的拦截器')

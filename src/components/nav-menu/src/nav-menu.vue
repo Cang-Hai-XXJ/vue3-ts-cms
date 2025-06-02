@@ -29,6 +29,7 @@
                 <el-menu-item
                   :index="subitem.id + ''"
                   @click="handleClickMenuItem(subitem)"
+                  class="subItem"
                 >
                   <el-icon class="icon" v-if="subitem.icon">
                     <component :is="item.icon"></component>
@@ -150,7 +151,9 @@ defineProps({
       background-color: #0c2135 !important;
     }
   }
-
+  .subItem {
+    margin-left: 25px;
+  }
   :deep(.el-submenu__title) {
     background-color: #001529 !important;
   }

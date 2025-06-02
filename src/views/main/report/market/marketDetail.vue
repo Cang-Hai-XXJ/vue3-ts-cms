@@ -22,7 +22,7 @@
       </div>
       <iframe
         v-if="report?.reportUrl"
-        id="bi_iframe"
+        id="wx_iframe"
         style="width: 100%; height: 700px"
         class="content"
         :src="report?.reportUrl"
@@ -308,14 +308,57 @@ const report = ref<ViewDetailRes>()
 const input = ref('')
 const input1 = ref('')
 const replies = ref<UserWords[]>([])
-const proxyUrl = (url: any) => {
-  return 'https://cors-anywhere.herokuapp.com/' + url
+import { BASE_URL } from '@/service/request/config'
+
+const mapper: any = {
+  'https://mp.weixin.qq.com': 'wx',
+  'https://mmbiz.qpic.cn': 'wxImg',
+  'http://mmbiz.qpic.cn': 'wxImg',
+  'http://mp.weixin.qq.com': 'wx'
 }
+
+function proxyUrl(url: string) {
+  for (var key in mapper) {
+    if (url.startsWith(key)) {
+      return BASE_URL + mapper[key] + url.slice(key.length)
+    }
+  }
+  return url
+}
+
 getReport(id.value as any).then((res) => {
   report.value = res
   axios.get(proxyUrl(report.value?.reportUrl)).then((res) => {
-    const html = res.data.replace(/data-src/g, 'src')
-    document.querySelector('#bi_iframe')?.contentDocument.write(html)
+    const html = res.data
+      .replace(/data-src/g, 'src')
+      .replace(
+        /background-image: url\(&quot;(http[^&]+)/g,
+        (s: any, g: any) => `background-image: url(&quot;${proxyUrl(g)}`
+      )
+      .replace(
+        /<meta\s+name="referrer"\s+content="[^"]+"/g,
+        '<meta name="referrer" content="never"'
+      )
+
+    let backgroundUrlReg = /url[(]&quot;(\S*)&quot;/g
+    let backgroundImgs = html.match(backgroundUrlReg)
+    //本人的正则不是很熟练，大佬可以自行对正则优化，这里只是提供一个思路
+    if (backgroundImgs && backgroundImgs.length) {
+      backgroundImgs.forEach((item: string) => {
+        let url = item.replace(/url[(]&quot;/g, '').replace(/&quot;/g, '')
+        let img = document.createElement('img')
+        img.src = url
+        doc.querySelector('body').appendChild(img)
+        //通过对生成一个无效的img进行赋值，使这个路径能够绕过检测，这样背景图片也能够正常展示了
+      })
+    }
+
+    console.log('html', html)
+
+    const doc =
+      document.querySelector('#wx_iframe')?.contentDocument ||
+      document.querySelector('#wx_iframe')
+    doc.write(html)
   })
 })
 

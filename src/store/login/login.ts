@@ -27,14 +27,14 @@ const loginModules: Module<ILoginState, IRootState> = {
           url: '/main/index',
           sort: 1
         },
-        {
-          name: '指数查询',
-          type: 2,
-          id: 2,
-          icon: 'TrendCharts',
-          url: '/main/queryIndex',
-          sort: 1
-        },
+        // {
+        //   name: '指数查询',
+        //   type: 2,
+        //   id: 2,
+        //   icon: 'TrendCharts',
+        //   url: '/main/queryIndex',
+        //   sort: 1
+        // },
         {
           name: '数据服务',
           type: 1,
