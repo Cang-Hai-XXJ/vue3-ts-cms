@@ -25,7 +25,7 @@
         id="wx_iframe"
         style="width: 100%; height: 700px"
         class="content"
-        :src="report?.reportUrl"
+        src=""
         frameborder="0"
       ></iframe>
       <img v-else style="width: 100%; height: 700px" />
@@ -308,7 +308,7 @@ const report = ref<ViewDetailRes>()
 const input = ref('')
 const input1 = ref('')
 const replies = ref<UserWords[]>([])
-import { BASE_URL } from '@/service/request/config'
+import { BASE_DOMAIN } from '@/service/request/config'
 
 const mapper: any = {
   'https://mp.weixin.qq.com': 'wx',
@@ -318,12 +318,13 @@ const mapper: any = {
 }
 
 function proxyUrl(url: string) {
+  let redirectURL = ''
   for (var key in mapper) {
     if (url.startsWith(key)) {
-      return BASE_URL + mapper[key] + url.slice(key.length)
+      redirectURL = BASE_DOMAIN + mapper[key] + url.slice(key.length)
     }
   }
-  return url
+  return redirectURL
 }
 
 getReport(id.value as any).then((res) => {
@@ -342,7 +343,6 @@ getReport(id.value as any).then((res) => {
 
     let backgroundUrlReg = /url[(]&quot;(\S*)&quot;/g
     let backgroundImgs = html.match(backgroundUrlReg)
-    //本人的正则不是很熟练，大佬可以自行对正则优化，这里只是提供一个思路
     if (backgroundImgs && backgroundImgs.length) {
       backgroundImgs.forEach((item: string) => {
         let url = item.replace(/url[(]&quot;/g, '').replace(/&quot;/g, '')
@@ -353,12 +353,11 @@ getReport(id.value as any).then((res) => {
       })
     }
 
-    console.log('html', html)
-
     const doc =
       document.querySelector('#wx_iframe')?.contentDocument ||
-      document.querySelector('#wx_iframe')
+      document.querySelector('#wx_iframe')?.contentWindow.document
     doc.write(html)
+    // doc.write('<h1>旧的不去，新的不来！</h1>')
   })
 })
 

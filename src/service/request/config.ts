@@ -1,4 +1,5 @@
 export let BASE_URL = ''
+export const BASE_DOMAIN = 'https://koiai.com.cn/'
 export const TIME_OUT = 5000
 export const PRE_FIX = '/v1/'
 export const BASE_NAME = '选品大师'
