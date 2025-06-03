@@ -96,20 +96,9 @@ const opt = reactive({
 })
 const loaded = ref(false)
 const formInline = ref({
-  region: 2840,
-  language: 'en',
-  keywords: [
-    'book',
-    'cheap laptops for sale',
-    'tangerine',
-    'football',
-    'apple',
-    'cloth',
-    'marry',
-    'glasses',
-    'egg',
-    'orange'
-  ]
+  region: '',
+  language: '',
+  keywords: []
 })
 const submit = () => {
   loaded.value = false

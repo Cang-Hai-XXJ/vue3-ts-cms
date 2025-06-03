@@ -254,13 +254,13 @@ export interface AmazonRelatedKeywordsLiveParams {
   locationName?: string
 
   /* */
-  locationCode?: number
+  locationCode?: number | string
 
   /* */
   languageName?: string
 
   /* */
-  languageCode?: string
+  languageCode?: string | number
 
   /* */
   depth?: number
@@ -455,7 +455,7 @@ export interface DataforseoTrendsDemographyLiveParams {
   locationName?: string
 
   /*地域编码 */
-  locationCode?: number
+  locationCode?: number | string
 
   /*类型,web/news/ecommerce,默认web */
   type?: string
@@ -635,7 +635,7 @@ export interface AmazonProductRankOverviewLiveParams {
   locationName?: string
 
   /*地域编码 */
-  locationCode?: number
+  locationCode?: number | string
 
   /*语言名称 */
   languageName?: string

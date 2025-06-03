@@ -66,9 +66,9 @@ const option1 = ref({
 const loaded = ref(false)
 
 const formInline = ref({
-  region: 2840,
-  language: 'en',
-  keywords: ['B001TJ3HUG', 'B01LW2SL7R']
+  region: '',
+  language: '',
+  keywords: []
 })
 const submit = () => {
   loaded.value = false

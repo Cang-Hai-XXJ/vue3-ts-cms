@@ -63,9 +63,9 @@ interface IData {
 const chartData = ref<IData>()
 const loaded = ref(false)
 const formInline = ref({
-  region: 2840,
-  keywords: ['computer', ' mouse'],
-  type: 'web',
+  region: '',
+  keywords: [],
+  type: '',
   dateFrom: '',
   dateTo: '',
   dateRange: []

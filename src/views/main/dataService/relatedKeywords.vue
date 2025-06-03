@@ -162,9 +162,9 @@ const opt1 = reactive({
 })
 const loaded = ref(false)
 const formInline = ref({
-  region: 2840,
-  language: 'en',
-  keywords: ['computer', ' mouse'],
+  region: '',
+  language: '',
+  keywords: [],
   deep: 1,
   seed: true,
   synonym: true
