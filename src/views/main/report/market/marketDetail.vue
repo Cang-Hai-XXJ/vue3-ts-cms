@@ -83,13 +83,13 @@
           />
           收藏&nbsp;{{ report?.reportUserBehaviorSummaryResponse.follow }}
         </div>
-        <div>
+        <div @click="handleToReply">
           <img src="~@/assets/img/评论@1x.png" class="myIcon" />{{
             replyNum
           }}条评论
         </div>
       </section>
-      <section class="comments">
+      <section class="comments" ref="replyRef">
         <div class="title">
           <el-input
             v-model="input"
@@ -213,68 +213,21 @@ import {
   UserWords,
   ViewDetailRes
 } from '@/service/request/report/type'
-import Icon from '../../dataService/cpns/icon.vue'
 
-// // 1.注册Service Worker
-// navigator.serviceWorker.register('./sw-proxy.js')
-
-// // 2.拦截请求（sw-proxy.js）
-// self.addEventListener('fetch', async (event) => {
-//   const { request } = event
-//   let response = await fetch(request)
-//   // 3.重新构造Response
-//   response = new Response(response.body, response)
-//   // 4.篡改响应头
-//   response.headers.delete('Content-Security-Policy')
-//   response.headers.delete('X-Frame-Options')
-
-//   event.respondWith(Promise.resolve(originalResponse))
-// })
-// const https = require('https')
-// const querystring = require('querystring')
-// const url = require('url')
-
-// const port = 10101
-// // 1.创建代理服务
-// https.createServer(onRequest).listen(port)
-// function onRequest(req, res) {
-//   const originUrl = url.parse(req.url)
-//   const qs = querystring.parse(originUrl.query)
-//   const targetUrl = qs['target']
-//   const target = url.parse(targetUrl)
-
-//   const options = {
-//     hostname: target.hostname,
-//     port: 80,
-//     path: url.format(target),
-//     method: 'GET'
-//   }
-
-//   // 2.代发请求
-//   const proxy = https.request(options, (_res) => {
-//     // 3.修改响应头
-//     const fieldsToRemove = ['x-frame-options', 'content-security-policy']
-//     Object.keys(_res.headers).forEach((field) => {
-//       if (!fieldsToRemove.includes(field.toLocaleLowerCase())) {
-//         res.setHeader(field, _res.headers[field])
-//       }
-//     })
-//     _res.pipe(res, {
-//       end: true
-//     })
-//   })
-//   req.pipe(proxy, {
-//     end: true
-//   })
-// }
 const isClickUp = ref(false)
 const isClickDown = ref(false)
 const isClickFollow = ref(false)
+const route = useRoute()
+const id = ref<any>(route.params.id)
+const report = ref<ViewDetailRes>()
+const input = ref('')
+const input1 = ref('')
+const replies = ref<UserWords[]>([])
 const thumbUpHandle = () => {
   thumbUp(report.value?.reportId).then((res) => {
     if (res && isClickUp.value == false) {
       ;(report.value as any).reportUserBehaviorSummaryResponse.thumbUp++
-    } else {
+    } else if (res && isClickUp.value == true) {
       ;(report.value as any).reportUserBehaviorSummaryResponse.thumbUp--
     }
     res ? (isClickUp.value = !isClickUp.value) : ''
@@ -283,31 +236,30 @@ const thumbUpHandle = () => {
 const thumbDownHandle = () => {
   thumbDown(report.value?.reportId).then((res) => {
     if (res && isClickDown.value == false) {
-      ;(report as any).reportUserBehaviorSummaryResponse.thumbDown.value++
-    } else {
-      ;(report as any).reportUserBehaviorSummaryResponse.thumbDown.value--
+      ;(report.value as any).reportUserBehaviorSummaryResponse.thumbDown++
+    } else if (res && isClickDown.value == true) {
+      ;(report.value as any).reportUserBehaviorSummaryResponse.thumbDown--
     }
     res ? (isClickDown.value = !isClickDown.value) : ''
   })
-  // isClickDown.value = !isClickDown.value
 }
 const followHandle = () => {
   follow(report.value?.reportId).then((res) => {
     if (res && isClickFollow.value == false) {
-      ;(report as any).reportUserBehaviorSummaryResponse.follow.value++
-    } else {
-      ;(report as any).reportUserBehaviorSummaryResponse.follow.value--
+      ;(report.value as any).reportUserBehaviorSummaryResponse.follow++
+    } else if (res && isClickFollow.value == true) {
+      ;(report.value as any).reportUserBehaviorSummaryResponse.follow--
     }
     res ? (isClickFollow.value = !isClickFollow.value) : ''
   })
-  // isClickFollow.value = !isClickFollow.value
 }
-const route = useRoute()
-const id = ref<any>(route.params.id)
-const report = ref<ViewDetailRes>()
-const input = ref('')
-const input1 = ref('')
-const replies = ref<UserWords[]>([])
+const replyRef = ref()
+const handleToReply = () => {
+  replyRef.value.scrollIntoView({
+    behavior: 'smooth', // 平滑过渡
+    block: 'start' // 上边框与视窗顶部平齐。默认值
+  })
+}
 import { BASE_DOMAIN } from '@/service/request/config'
 
 const mapper: any = {

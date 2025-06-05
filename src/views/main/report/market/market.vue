@@ -89,10 +89,12 @@
         </div>
         <div class="pagination">
           <el-pagination
+            v-model:current-page="currPage"
             size="small"
             background
             layout="prev, pager, next"
             :total="totalPage"
+            @current-change="handleCurrentChange"
           />
         </div>
       </div>
@@ -197,7 +199,13 @@ const arr = reactive([
 
 const currPage = ref(1)
 const totalPage = ref(0)
-
+const handleCurrentChange = (val: number) => {
+  currPage.value = val
+  getReportPage(currPage.value, 12, {}).then((res) => {
+    reports.value = res.records
+    totalPage.value = res.total
+  })
+}
 import { sortType } from '@/utils/enum'
 const reports = ref<ViewRes[]>([])
 getReportPage(currPage.value, 12, {}).then((res) => {
