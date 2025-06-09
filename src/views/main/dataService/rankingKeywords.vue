@@ -1,7 +1,13 @@
 <template>
   <div class="batch page-bg pd_20">
     <section>
-      <Search></Search>
+      <SearchCompare
+        v-model="formInline"
+        @submit="submit"
+        deep
+        synonym
+        :maxLength="5"
+      ></SearchCompare>
     </section>
     <section class="table">
       <div class="title"></div>
@@ -13,19 +19,21 @@
             width="100"
             label="序号"
           />
+          <el-table-column align="center" label="绝对排名/相对排名">
+            <template #default="scope">
+              <div class="flex-col">
+                <div>绝对排名&nbsp;{{ scope.row.rankAbs }}</div>
+                <div>相对排名&nbsp;{{ scope.row.rankCom }}</div>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="searchID" label="查询ID" />
           <el-table-column
             align="center"
-            prop="keyword"
-            label="绝对排名/相对排名"
+            prop="keyWordsInfo"
+            label="关键词信息"
           />
-          <el-table-column
-            align="center"
-            prop="searchVolume"
-            label="查询ID
-"
-          />
-          <el-table-column align="center" prop="seType" label="关键词信息" />
-          <el-table-column align="center" prop="seType" label="排名信息" />
+          <el-table-column align="center" prop="rankInfo" label="排名信息" />
         </el-table>
       </div>
     </section>
@@ -80,15 +88,45 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import type { TagProps } from 'element-plus'
+import SearchCompare from './cpns/searchCompare.vue'
+import { amazonRankedKeywordsLive } from '@/service/request/dataService'
+
 type Item = { type: TagProps['type']; label: string; icon?: string }
 interface ItableData {
   keyword: string
-  seType: string
-  searchVolume: number
+  rankAbs: string
+  rankCom: string
+  updateTIme: string
+  searchNum: string
+  searchID: string
 }
-const tableData = ref<ItableData[]>()
-import Search from './cpns/search.vue'
 
+const tableData = ref<ItableData[]>([
+  {
+    keyword: 'qwe',
+    rankAbs: '12',
+    rankCom: '1',
+    updateTIme: '2025-04-05 00:34:34',
+    searchNum: '9.9w',
+    searchID: "Women's T-shirt "
+  }
+])
+const formInline = ref({
+  region: '',
+  language: '',
+  keywords: [],
+  subKeyWords: '',
+  synonym: true,
+  deep: ''
+})
+const submit = () => {
+  amazonRankedKeywordsLive({
+    asin: formInline.value.keywords,
+    locationCode: formInline.value.region,
+    languageCode: formInline.value.language,
+    ignoreSynonyms: formInline.value.synonym
+  })
+}
 const handleCurrentChange = (val: number) => {
   console.log(`current page: ${val}`)
 }

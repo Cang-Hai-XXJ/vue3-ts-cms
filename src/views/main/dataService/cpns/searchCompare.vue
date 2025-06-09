@@ -53,6 +53,7 @@
                 />
               </el-select>
             </el-form-item>
+
             <el-form-item v-if="language" label="语言">
               <el-select
                 v-model="formData.language"
@@ -68,6 +69,7 @@
                 />
               </el-select>
             </el-form-item>
+
             <el-form-item v-if="keyWordsType" label="类型">
               <el-select
                 v-model="formData.type"
@@ -80,10 +82,8 @@
                 <el-option label="ecommerce" value="ecommerce" />
               </el-select>
             </el-form-item>
-          </el-row>
 
-          <el-row v-if="deep">
-            <el-form-item label="关联深度">
+            <el-form-item label="关联深度" v-if="deep">
               <el-select
                 v-model="formData.deep"
                 clearable
@@ -96,19 +96,32 @@
                 <el-option disabled label="4 – 1554 keywords" :value="4" />
               </el-select>
             </el-form-item>
-            <el-form-item label="是否包含种子关键词">
+          </el-row>
+
+          <el-row>
+            <el-form-item label="包含种子关键词">
+              <el-input
+                ref="InputRef"
+                v-model="formData.subKeyWords"
+                style="width: 200px"
+              />
+            </el-form-item>
+
+            <el-form-item label="是否包含种子关键词" v-if="subKeyWords">
               <el-radio-group v-model="formData.seed">
                 <el-radio :value="true">是</el-radio>
                 <el-radio :value="false">否</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="是否忽略同义词">
+
+            <el-form-item label="是否忽略同义词" v-if="synonym">
               <el-radio-group v-model="formData.synonym">
                 <el-radio :value="true">是</el-radio>
                 <el-radio :value="false">否</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-row>
+
           <el-form-item v-if="date" label="时间范围">
             <el-date-picker
               v-model="formData.dateRange"
@@ -177,6 +190,14 @@ const props = defineProps({
     default: 10
   },
   deep: {
+    type: Boolean,
+    default: false
+  },
+  synonym: {
+    type: Boolean,
+    default: false
+  },
+  subKeyWords: {
     type: Boolean,
     default: false
   },

@@ -65,9 +65,9 @@ export interface AmazonBulkSearchVolumeLiveRes {
 }
 
 export interface AmazonRankedKeywordsLiveParams {
-  asin?: string
+  asin?: string[]
   locationName?: string
-  locationCode?: number
+  locationCode?: number | string
   languageName?: string
   languageCode?: string
   limit?: number
