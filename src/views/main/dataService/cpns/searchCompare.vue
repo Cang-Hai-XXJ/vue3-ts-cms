@@ -43,6 +43,7 @@
                 clearable
                 placeholder="请选择地区"
                 style="width: 150px"
+                @change="changeRegion"
               >
                 <el-option
                   v-for="item of locationOptions"
@@ -164,6 +165,7 @@ const shortcuts = [
     }
   }
 ]
+
 const props = defineProps({
   modelValue: {
     type: Object,
@@ -213,6 +215,13 @@ const locationOptions = ref<GetLocationsRes[]>(
   sessionCache.getCache('languageOptions')
 )
 
+const changeRegion = (val: any) => {
+  getLanguages(val).then((res) => {
+    formData.language = ''
+    languageOptions.value = res
+    sessionCache.setCache('languageOptions', res)
+  })
+}
 // 缓存通用数据
 import { sessionCache } from '@/utils/localCache'
 import { isEmpty } from '@/utils/util'

@@ -80,6 +80,8 @@ const submit = () => {
     }
   ]).then((res) => {
     //图表
+    option.value.title.subtext = ''
+    option1.value.title.subtext = ''
 
     option.value.series = res.tasks[0].result[0].items.map((item) => {
       const { pos1, pos23, pos410, pos11100 } = item.metrics.amazonPaid
