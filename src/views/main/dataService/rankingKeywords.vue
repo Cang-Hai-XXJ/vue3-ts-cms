@@ -12,28 +12,106 @@
     <section class="table">
       <div class="title"></div>
       <div class="content">
-        <el-table :data="tableData" style="width: 100%">
-          <el-table-column
-            align="center"
-            type="index"
-            width="100"
-            label="序号"
-          />
-          <el-table-column align="center" label="绝对排名/相对排名">
+        <el-table
+          :data="tableData"
+          style="width: 100%"
+          :preserve-expanded-content="preserveExpanded"
+          :cell-style="{ height: '120px' }"
+        >
+          >
+          <el-table-column type="index" width="200" label="序号">
             <template #default="scope">
-              <div class="flex-col">
-                <div>绝对排名&nbsp;{{ scope.row.rankAbs }}</div>
-                <div>相对排名&nbsp;{{ scope.row.rankCom }}</div>
+              <div class="flex-row">
+                <div style="font-weight: 600">#{{ scope.$index + 1 }}</div>
+                <img class="img" src="~img/Frame.png" />
               </div>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="searchID" label="查询ID" />
+
+          <el-table-column align="center" label="绝对排名/相对排名">
+            <template #default="scope">
+              <div>
+                <div>
+                  绝对排名&nbsp;<span style="font-weight: 600">{{
+                    scope.row.rankAbs
+                  }}</span>
+                </div>
+                <div>
+                  相对排名&nbsp;<span style="font-weight: 600">{{
+                    scope.row.rankCom
+                  }}</span>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="searchID" label="查询ID">
+            <template #default="scope">
+              <div style="font-weight: 600">{{ scope.row.searchID }}</div>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             prop="keyWordsInfo"
             label="关键词信息"
-          />
-          <el-table-column align="center" prop="rankInfo" label="排名信息" />
+          >
+            <template #default="scope">
+              <div>
+                <div>
+                  搜索量&nbsp;<span style="font-weight: 600">{{
+                    scope.row.rankAbs
+                  }}</span>
+                </div>
+                <div>
+                  最近更新时间&nbsp;<span style="font-weight: 600">{{
+                    scope.row.rankCom
+                  }}</span>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" prop="rankInfo" label="排名信息">
+            <template #default="scope">
+              <div>
+                <div>搜索量&nbsp;{{ scope.row.rankAbs }}</div>
+                <div>最近更新时间&nbsp;{{ scope.row.rankCom }}</div>
+              </div>
+            </template>
+          </el-table-column>
+
+          <el-table-column type="expand">
+            <template #default="props">
+              <div class="expandInfo">
+                <div class="left">
+                  <div>
+                    Sy world Designer Casual Tops Women's T-shirt Men's Shorts
+                    Central Cee Clothing Uk Drill Hairstyle Streetwear Summer
+                    Clothes
+                  </div>
+                  <div class="bottom">
+                    <div class="price">$44.99-$51.60{{ props.row.date }}</div>
+                    <div class="label">8.8折</div>
+                  </div>
+                </div>
+                <div class="center">
+                  <el-tag
+                    v-for="item in items"
+                    class="tag"
+                    :key="item.label"
+                    effect="dark"
+                  >
+                    <img v-if="item.icon" :src="item.icon" alt="" />{{
+                      item.label
+                    }}
+                  </el-tag>
+                </div>
+                <div class="right">
+                  <p>95%</p>
+                  <p>好评率</p>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
     </section>
@@ -100,7 +178,7 @@ interface ItableData {
   searchNum: string
   searchID: string
 }
-
+const preserveExpanded = ref(false)
 const tableData = ref<ItableData[]>([
   {
     keyword: 'qwe',
@@ -154,6 +232,104 @@ const items = ref<Array<Item>>([
   background-color: var(--bg-color) !important;
   gap: 20px;
   text-align: left;
+  .expandInfo {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    // fix border-right
+    width: calc(100% - 1px);
+    height: 110px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    padding: 15px 40px;
+    margin: 0 auto;
+    .left {
+      width: 45%;
+      font-size: 16px;
+      line-height: 24px;
+      color: #1f2937;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 10px;
+      .bottom {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        .price {
+          font-size: 18px;
+          font-size: 18px;
+          color: #e83e3e;
+          margin-right: 5px;
+        }
+        .label {
+          width: 40px;
+          font-size: 12px;
+          line-height: 18px;
+          text-align: center;
+          color: #fff;
+          background-color: var(--main-color);
+          margin-right: 150px;
+        }
+        .font_14 {
+          margin-right: 150px;
+        }
+      }
+    }
+    .center {
+      margin-left: 20px;
+      display: flex;
+      gap: 10px;
+      justify-self: start;
+      flex: 1;
+      .tag {
+        display: flex;
+        align-items: center;
+        border: 1px solid #fff;
+        img {
+          width: 10px;
+          margin-right: 5px;
+        }
+        &:nth-child(1) {
+          background: linear-gradient(90deg, #ff8746 0%, #ffce46 100%);
+        }
+        &:nth-child(2) {
+          background: linear-gradient(90deg, #3bb330 0%, #46e57b 100%);
+        }
+      }
+    }
+    .right {
+      width: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-self: center;
+      p {
+        margin: 2px;
+      }
+      p:nth-child(1) {
+        font-size: 24px;
+        font-weight: 500;
+        text-align: center;
+        color: #4040f2;
+      }
+      p:nth-child(2) {
+        font-size: 14px;
+        font-weight: 500;
+        text-align: center;
+        color: #6b7280;
+      }
+    }
+  }
+  .img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    margin-left: 60px;
+  }
   section {
     width: 100%;
     border-radius: 12px;
