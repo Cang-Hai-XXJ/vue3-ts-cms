@@ -470,6 +470,65 @@
             </div>
           </div>
         </section>
+        <section v-else-if="currIndex == 8" class="invite">
+          <div class="header">
+            <div>邀请好友</div>
+            <div class="btn" @click="invite">
+              <img src="@/assets/img/icon/邀请@1x.png" alt="" />
+              邀请好友
+            </div>
+          </div>
+          <div class="content">
+            <el-table
+              :data="tableData1"
+              style="width: 100%"
+              :header-cell-style="{ background: '#f4f6f8', color: '#6B7280' }"
+            >
+              <el-table-column
+                prop="period"
+                label="邀请好友"
+                align="center"
+                width="200"
+              >
+                <template #default="scope">
+                  <div
+                    style="display: flex; gap: 20px; justify-content: center"
+                  >
+                    <el-avatar :size="50" :src="scope.row.avatar" />
+                    <div class="flex" style="align-items: flex-start">
+                      <div style="color: #000000">{{ scope.row.name }}</div>
+                      <div style="color: #6b7280">ID：{{ scope.row.id }}</div>
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+
+              <el-table-column
+                prop="time"
+                label="好友注册时间"
+                align="center"
+              />
+              <el-table-column prop="state" label="获得算力" align="center">
+                <template #default="scope">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 5px;
+                      justify-content: center;
+                    "
+                  >
+                    <img
+                      style="width: 16px; height: 16px"
+                      src="@/assets/img/header1.png"
+                    />
+                    <div>{{ scope.row.value }}</div>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </section>
       </el-main>
     </el-container>
     <el-dialog
@@ -763,6 +822,10 @@
         </div>
       </template>
     </el-dialog>
+    <InvitePopup
+      :visible="isShowInvite"
+      @close="isShowInvite = false"
+    ></InvitePopup>
   </div>
 </template>
 
@@ -919,6 +982,12 @@ const arr = [
     icon: require('@/assets/img/icon/订阅@2x.png'),
     iconAT: require('@/assets/img/icon/订阅@2xAT.png'),
     index: '7'
+  },
+  {
+    label: '邀请好友',
+    icon: require('@/assets/img/icon/邀请.png'),
+    iconAT: require('@/assets/img/icon/邀请AT.png'),
+    index: '8'
   }
 ]
 
@@ -991,6 +1060,50 @@ const tableData = [
     state: '已完成',
     cp: '1000',
     keywords: 'Grove St'
+  }
+]
+//invite
+import InvitePopup from '@/base-ui/InvitePopup.vue'
+import { tr } from 'element-plus/es/locale'
+const isShowInvite = ref(false)
+const invite = () => {
+  isShowInvite.value = true
+}
+const tableData1 = [
+  {
+    time: '2016-05-03',
+    name: 'Tom',
+    id: '1000',
+    avatar: 'Grove St',
+    value: '200'
+  },
+  {
+    time: '2016-05-03',
+    name: 'Tom',
+    id: '1000',
+    avatar: 'Grove St',
+    value: '200'
+  },
+  {
+    time: '2016-05-03',
+    name: 'Tom',
+    id: '1000',
+    avatar: 'Grove St',
+    value: '200'
+  },
+  {
+    time: '2016-05-03',
+    name: 'Tom',
+    id: '1000',
+    avatar: 'Grove St',
+    value: '200'
+  },
+  {
+    time: '2016-05-03',
+    name: 'Tom',
+    id: '1000',
+    avatar: 'Grove St',
+    value: '200'
   }
 ]
 const addStar = () => {
@@ -1296,6 +1409,27 @@ const userFormStar = reactive({
                 margin: 4px 0px;
               }
             }
+          }
+        }
+      }
+    }
+    .invite {
+      min-height: 800px;
+      .header {
+        margin-bottom: 40px;
+        .btn {
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          align-items: center;
+          width: 102.01px !important;
+          height: 32px;
+          line-height: 32px;
+          border-radius: 3px;
+          font-size: 14px;
+          cursor: pointer;
+          img {
+            color: #fff;
           }
         }
       }

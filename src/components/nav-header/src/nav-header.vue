@@ -18,7 +18,13 @@
           ><img src="~img/diamond-icon.png" alt="" />订阅服务</el-button
         > -->
         <div class="opt">
-          <div><img src="@/assets/img/header2.png" alt="" />升级套餐</div>
+          <div>
+            <img
+              src="@/assets/img/header2.png"
+              alt=""
+              @click="isShowDialog = true"
+            />升级套餐
+          </div>
           <el-popover
             popper-class="custom-popover"
             :content="
@@ -141,9 +147,11 @@
       </div>
     </el-dialog>
   </div>
+  <AdPopup :visible="isShowDialog" @close="isShowDialog = false"></AdPopup>
 </template>
 
 <script lang="ts" setup>
+import AdPopup from '@/base-ui/AdPopup.vue'
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
@@ -159,6 +167,7 @@ const href = router.resolve({
   name: 'rule', // 这里是跳转页面的name
   path: '/rule'
 }).href
+const isShowDialog = ref(false)
 
 const openPage = () => {
   window.open(href, '_blank')
@@ -237,6 +246,17 @@ const ruleVisible = ref(false)
 </script>
 
 <style scoped lang="less">
+.dialogAd {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  img {
+    width: 400px;
+    height: 681.28px;
+  }
+}
 .dialog {
   .top {
     width: 592px;

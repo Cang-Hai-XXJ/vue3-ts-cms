@@ -33,12 +33,12 @@ export const copyToClipboard = (key: string) => {
     navigator.clipboard.writeText(key).then(
       () => {
         ElMessage({
-          message: '复制文本成功',
+          message: '复制成功~',
           type: 'success'
         })
       },
       () => {
-        ElMessage.error('复制文本失败')
+        ElMessage.error('复制失败!')
       }
     )
   } else if (document.execCommand('copy')) {
@@ -49,10 +49,10 @@ export const copyToClipboard = (key: string) => {
     document.execCommand('copy')
     document.body.removeChild(tempInput)
     ElMessage({
-      message: '复制文本成功',
+      message: '复制成功~',
       type: 'success'
     })
   } else {
-    ElMessage.error('浏览器暂不支持')
+    ElMessage.error('浏览器暂不支持~')
   }
 }
