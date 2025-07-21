@@ -51,7 +51,7 @@
             class="myIcon"
             @click="thumbUpHandle"
           />
-          赞&nbsp;{{ report?.reportUserBehaviorSummaryResponse.thumbUp }}
+          赞&nbsp;{{ report?.reportUserBehaviorSummaryResponse?.thumbUp }}
         </div>
         <div>
           <img
@@ -66,22 +66,22 @@
             class="myIcon"
             @click="thumbDownHandle"
           />
-          踩&nbsp;{{ report?.reportUserBehaviorSummaryResponse.thumbDown }}
+          踩&nbsp;{{ report?.reportUserBehaviorSummaryResponse?.thumbDown }}
         </div>
         <div>
           <img
             v-if="isClickFollow"
-            src="~@/assets/img/关注-选中@1x.png"
+            src="@/assets/img/关注-选中@1x.png"
             class="myIcon"
             @click="followHandle"
           />
           <img
             v-else
-            src="~@/assets/img/关注@1x.png"
+            src="@/assets/img/关注@1x.png"
             class="myIcon"
             @click="followHandle"
           />
-          收藏&nbsp;{{ report?.reportUserBehaviorSummaryResponse.follow }}
+          收藏&nbsp;{{ report?.reportUserBehaviorSummaryResponse?.follow }}
         </div>
         <div @click="handleToReply">
           <img src="~@/assets/img/评论@1x.png" class="myIcon" />{{
@@ -191,6 +191,39 @@
         </div>
       </div>
     </section>
+    <el-dialog
+      v-model="followVisible"
+      title="添加收藏"
+      width="550"
+      style="padding: 30px 50px"
+    >
+      <div class="dialog_content">
+        <div
+          class="contentItem"
+          v-for="(item, index) in followList"
+          :key="index"
+        >
+          <div class="left">
+            <div>{{ item.name }}</div>
+            <div>{{ item.num }}条内容</div>
+          </div>
+          <div class="right" @click="handleClickFollow(item)">
+            {{ item.isFollow ? '已收藏' : '收藏' }}
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button
+            style="width: 90px; height: 35px"
+            type="primary"
+            @click="followVisible = false"
+          >
+            新建收藏夹
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -217,12 +250,45 @@ import {
 const isClickUp = ref(false)
 const isClickDown = ref(false)
 const isClickFollow = ref(false)
+const followVisible = ref(false)
 const route = useRoute()
 const id = ref<any>(route.params.id)
 const report = ref<ViewDetailRes>()
 const input = ref('')
 const input1 = ref('')
 const replies = ref<UserWords[]>([])
+const followList = reactive([
+  {
+    name: '默认收藏夹',
+    num: '33',
+    isFollow: false
+  },
+  {
+    name: '默认收藏夹',
+    num: '33',
+    isFollow: false
+  },
+  {
+    name: '默认收藏夹',
+    num: '33',
+    isFollow: false
+  },
+  {
+    name: '默认收藏夹',
+    num: '33',
+    isFollow: false
+  },
+  {
+    name: '默认收藏夹',
+    num: '33',
+    isFollow: false
+  },
+  {
+    name: '默认收藏夹',
+    num: '33',
+    isFollow: false
+  }
+])
 const thumbUpHandle = () => {
   thumbUp(report.value?.reportId).then((res) => {
     if (res && isClickUp.value == false) {
@@ -244,14 +310,26 @@ const thumbDownHandle = () => {
   })
 }
 const followHandle = () => {
-  follow(report.value?.reportId).then((res) => {
-    if (res && isClickFollow.value == false) {
-      ;(report.value as any).reportUserBehaviorSummaryResponse.follow++
-    } else if (res && isClickFollow.value == true) {
-      ;(report.value as any).reportUserBehaviorSummaryResponse.follow--
-    }
-    res ? (isClickFollow.value = !isClickFollow.value) : ''
-  })
+  //TODO getList
+  followVisible.value = true
+
+  // follow(report.value?.reportId).then((res) => {
+  //   if (res && isClickFollow.value == false) {
+  //     ;(report.value as any).reportUserBehaviorSummaryResponse.follow++
+  //   } else if (res && isClickFollow.value == true) {
+  //     ;(report.value as any).reportUserBehaviorSummaryResponse.follow--
+  //   }
+  //   res ? (isClickFollow.value = !isClickFollow.value) : ''
+  // })
+}
+const handleClickFollow = (item: any) => {
+  //TODO
+  item.isFollow = !item.isFollow
+  if (item.isFollow) {
+    ElMessage.success('收藏成功')
+  } else {
+    ElMessage.info('取消收藏')
+  }
 }
 const replyRef = ref()
 const handleToReply = () => {
@@ -272,7 +350,7 @@ const mapper: any = {
 function proxyUrl(url: string) {
   let redirectURL = ''
   for (var key in mapper) {
-    if (url.startsWith(key)) {
+    if (url?.startsWith(key)) {
       redirectURL = BASE_DOMAIN + mapper[key] + url.slice(key.length)
     }
   }
@@ -595,5 +673,47 @@ const turnToDetail = (i: any) => {
       }
     }
   }
+}
+.dialog_content {
+  width: 100%;
+  height: 240px;
+  overflow-y: auto;
+  /* 隐藏默认的滚动条样式 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  .contentItem {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .left {
+      color: #333333;
+      text-align: left;
+      & div:first-child {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+      & div:last-child {
+        font-size: 14px;
+        font-weight: 400;
+        // color: #6b7280;
+      }
+    }
+    .right {
+      width: 70px;
+      height: 36px;
+      line-height: 36px;
+      border-radius: 3px;
+      background: #f5f5ff;
+      font-size: 13px;
+      color: #4040f2;
+      cursor: pointer;
+    }
+  }
+}
+.dialog-footer {
+  text-align: center;
 }
 </style>

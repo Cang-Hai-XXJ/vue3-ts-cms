@@ -88,7 +88,7 @@ let defaultMenu = ref(menu?.id + '')
 
 const handleClickMenuItem = (menu: any) => {
   router.push({
-    path: menu.url ?? '/not-found'
+    path: menu.path ?? '/not-found'
   })
 }
 defineProps({

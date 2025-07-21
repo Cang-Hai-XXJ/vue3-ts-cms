@@ -64,3 +64,22 @@ export function pathMap2Breadcrumb(menus: any[], path: string) {
   pathMap2Menu(menus, path, breadcrumbs)
   return breadcrumbs
 }
+
+export function pathMap2BreadcrumbForDataService(
+  menus: any[],
+  path: string,
+  isShowBreadcrumbs: boolean
+) {
+  const breadcrumbs: IBreadcrumb[] = []
+  const p = menus.find((item) => item.path == path)
+  if (p) {
+    breadcrumbs.push(p)
+    if (isShowBreadcrumbs) {
+      breadcrumbs.push({
+        name: '关键词订阅',
+        path: ''
+      })
+    }
+  }
+  return breadcrumbs
+}

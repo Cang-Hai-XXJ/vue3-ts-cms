@@ -2,37 +2,45 @@
   <div class="search">
     <div class="flex gap-2">
       <div class="flex-line">
-        <span>关键词</span>
-        <el-tag
-          v-for="(tag, index) in formData.keywords"
-          class="tag"
-          :key="tag"
-          closable
-          :disable-transitions="false"
-          @close="handleClose(tag)"
-          size="large"
-          :style="{ color: themeColors[index] }"
-          color="#fff"
-        >
-          {{ tag }}
-        </el-tag>
-        <el-input
-          v-if="inputVisible"
-          ref="InputRef"
-          v-model="inputValue"
-          style="width: 200px"
-          placeholder="输入关键词，按回车确认"
-          @keyup.enter="handleInputConfirm"
-          @blur="handleInputConfirm"
-        />
-        <el-button
-          v-else-if="!inputValue && formData.keywords.length < maxLength"
-          class="button-new-tag"
-          @click="showInput"
-        >
-          + 添加对比
-        </el-button>
-        <el-button class="btn" @click="submit"> 确定 </el-button>
+        <div class="left">
+          <span>关键词</span>
+          <el-tag
+            v-for="(tag, index) in formData.keywords"
+            class="tag"
+            :key="tag"
+            closable
+            :disable-transitions="false"
+            @close="handleClose(tag)"
+            size="large"
+            :style="{ color: themeColors[index] }"
+            color="#fff"
+          >
+            {{ tag }}
+          </el-tag>
+          <el-input
+            v-if="inputVisible"
+            ref="InputRef"
+            v-model="inputValue"
+            style="width: 200px"
+            placeholder="输入关键词，按回车确认"
+            @keyup.enter="handleInputConfirm"
+            @blur="handleInputConfirm"
+          />
+          <el-button
+            v-else-if="!inputValue && formData.keywords.length < maxLength"
+            class="button-new-tag"
+            @click="showInput"
+          >
+            + 添加对比
+          </el-button>
+          <el-button class="btn" @click="submit"> 确定 </el-button>
+        </div>
+        <div class="right">
+          <el-button class="btn btnRight" @click="subscribe">
+            <img src="@/assets/img/diamond-icon.png" alt="" />
+            订阅服务
+          </el-button>
+        </div>
       </div>
       <div>
         <el-form :inline="true" :model="formData" class="form-inline">
@@ -48,8 +56,8 @@
                 <el-option
                   v-for="item of locationOptions"
                   :key="item"
-                  :label="item.locationName"
-                  :value="item.locationCode"
+                  :label="item?.locationName"
+                  :value="item?.locationCode"
                 />
               </el-select>
             </el-form-item>
@@ -64,8 +72,8 @@
                 <el-option
                   v-for="item of languageOptions"
                   :key="item"
-                  :label="item.languageName"
-                  :value="item.languageCode"
+                  :label="item?.languageName"
+                  :value="item?.languageCode"
                 />
               </el-select>
             </el-form-item>
@@ -151,7 +159,16 @@ import {
 } from '@/service/request/dataService/type'
 const shortcuts = [
   {
-    text: 'Last week',
+    text: '3天',
+    value: () => {
+      const end = new Date()
+      const start = new Date()
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 3)
+      return [start, end]
+    }
+  },
+  {
+    text: '7天',
     value: () => {
       const end = new Date()
       const start = new Date()
@@ -160,20 +177,20 @@ const shortcuts = [
     }
   },
   {
-    text: 'Last month',
+    text: '15天',
     value: () => {
       const end = new Date()
       const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 15)
       return [start, end]
     }
   },
   {
-    text: 'Last 3 months',
+    text: '30天',
     value: () => {
       const end = new Date()
       const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
       return [start, end]
     }
   }
@@ -214,7 +231,7 @@ const props = defineProps({
     default: false
   }
 })
-const emit = defineEmits(['update:modelValue', 'submit'])
+const emit = defineEmits(['update:modelValue', 'submit', 'subscribe'])
 const formData = reactive({ ...props.modelValue })
 
 watch(
@@ -275,6 +292,9 @@ const submit = () => {
   emit('submit')
 }
 
+const subscribe = () => {
+  emit('subscribe')
+}
 const handleInputConfirm = () => {
   if (inputValue.value) {
     formData.keywords.push(inputValue.value)
@@ -297,9 +317,18 @@ const handleInputConfirm = () => {
   }
   .flex-line {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
+    align-items: baseline;
+    .left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .right {
+      flex: 1;
+      text-align: right;
+      margin-right: 20px;
+    }
   }
   span {
     color: #4b5563;
@@ -315,6 +344,14 @@ const handleInputConfirm = () => {
   .btn {
     width: 80px !important;
     margin-left: 30px;
+  }
+  .btnRight {
+    width: 104px !important;
+    vertical-align: middle;
+
+    img {
+      margin-right: 5px;
+    }
   }
   .el-radio {
     margin-right: 10px;

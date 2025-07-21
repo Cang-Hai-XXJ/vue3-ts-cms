@@ -24,7 +24,7 @@ const loginModules: Module<ILoginState, IRootState> = {
           type: 2,
           id: 1,
           icon: 'Clock',
-          url: '/main/index',
+          path: '/main/index',
           sort: 1
         },
         // {
@@ -32,7 +32,7 @@ const loginModules: Module<ILoginState, IRootState> = {
         //   type: 2,
         //   id: 2,
         //   icon: 'TrendCharts',
-        //   url: '/main/queryIndex',
+        //   path: '/main/queryIndex',
         //   sort: 1
         // },
         {
@@ -40,44 +40,44 @@ const loginModules: Module<ILoginState, IRootState> = {
           type: 1,
           id: 12,
           icon: 'DataAnalysis',
-          url: '/main/data',
+          path: '/main/data',
           sort: 1,
           children: [
             {
               name: '批量关键词',
               type: 1,
               id: 11,
-              url: '/main/data/batchKeywords'
+              path: '/main/data/batchKeywords'
             },
             {
               name: '关联关键词',
               type: 1,
               id: 12,
-              url: '/main/data/relatedKeywords'
+              path: '/main/data/relatedKeywords'
             },
             {
               name: '排名关键词',
               type: 1,
               id: 13,
-              url: '/main/data/rankingKeywords'
+              path: '/main/data/rankingKeywords'
             },
             {
               name: '产品排名查询',
               type: 1,
               id: 14,
-              url: '/main/data/rankingSearch'
+              path: '/main/data/rankingSearch'
             },
             // {
             //   name: '谷歌趋势分析',
             //   type: 1,
             //   id: 16,
-            //   url: '/main/data/ChromeAnalysis'
+            //   path: '/main/data/ChromeAnalysis'
             // },
             {
               name: '人口分析',
               type: 1,
               id: 15,
-              url: '/main/data/populationAnalysis'
+              path: '/main/data/populationAnalysis'
             }
           ]
         },
@@ -86,7 +86,7 @@ const loginModules: Module<ILoginState, IRootState> = {
           type: 2,
           id: 6,
           icon: 'Document',
-          url: '/main/market',
+          path: '/main/market',
           sort: 1
         },
         {
@@ -94,7 +94,7 @@ const loginModules: Module<ILoginState, IRootState> = {
           type: 2,
           id: 3,
           icon: 'Tools',
-          url: '/analysis',
+          path: '/analysis',
           sort: 2
         },
         {
@@ -102,7 +102,7 @@ const loginModules: Module<ILoginState, IRootState> = {
           type: 3,
           id: 3,
           icon: 'Setting',
-          url: '/setting',
+          path: '/setting',
           sort: -1
         },
         {
@@ -110,7 +110,7 @@ const loginModules: Module<ILoginState, IRootState> = {
           type: 3,
           id: 4,
           icon: 'QuestionFilled',
-          url: '/help',
+          path: '/help',
           sort: -2
         }
       ]
@@ -151,7 +151,7 @@ const loginModules: Module<ILoginState, IRootState> = {
       //   {
       //     name: '报告',
       //     type: 2,
-      //     url: ''
+      //     path: ''
       //   }
       // ]
       commit('changeMenus', menus)

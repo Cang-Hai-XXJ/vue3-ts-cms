@@ -21,4 +21,10 @@ defineProps({
 })
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.nav-breadcrumb {
+  // height: 40px;
+  // background-color: var(--bg-color) !important;
+  // padding: 20px;
+}
+</style>

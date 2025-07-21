@@ -57,7 +57,7 @@ const handleFoldChange = (isFold: boolean) => {
   height: 100%;
   .page-bg {
     width: 100%;
-    height: auto;
+    height: 100%;
     background-color: #fff;
     border-radius: 5px;
     // overflow: hidden;
@@ -71,7 +71,7 @@ const handleFoldChange = (isFold: boolean) => {
   align-items: center;
 }
 .el-header {
-  height: var(--header-height) !important;
+  min-height: var(--header-height) !important;
 }
 .el-aside {
   position: relative;

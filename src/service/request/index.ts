@@ -75,7 +75,7 @@ class MYRequest {
       },
       (err) => {
         // HttpErrorCode 类型错误拦截
-        if (err.response.status == 401) {
+        if (err.response?.status == 401) {
           ElMessage.error('登录失效，请重新登录')
           router.push(`/login`)
         } else {

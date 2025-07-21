@@ -43,6 +43,9 @@
           </el-popover>
         </div>
       </section>
+      <!-- <section>
+        <myBreadcrumb :breadcrumbs="breadcrumbs"></myBreadcrumb>
+      </section> -->
     </template>
     <!-- default -->
     <template v-else>
@@ -155,10 +158,10 @@ import AdPopup from '@/base-ui/AdPopup.vue'
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
+import navUserInfo from './nav-user-info.vue'
 
 import myBreadcrumb from '@/base-ui/breadcrumb'
-import navUserInfo from './nav-user-info.vue'
-import { pathMap2Breadcrumb } from '@/utils/map-menus'
+import { pathMap2BreadcrumbForDataService } from '@/utils/map-menus'
 import { useStoreWithModules } from '@/store'
 import { useRouter } from 'vue-router'
 
@@ -232,9 +235,12 @@ defineProps({
 })
 //面包削
 const breadcrumbs = computed(() => {
-  const menus = useStoreWithModules().state.login.menus
+  const menus = useStoreWithModules().state.login.menus.find(
+    (item) => item.id == 12
+  )?.children
   const path = useRoute().path
-  return pathMap2Breadcrumb(menus, path)
+
+  return menus?.length ? pathMap2BreadcrumbForDataService(menus, path) : []
 })
 
 const isFirstHover = ref(true)
@@ -351,6 +357,7 @@ const ruleVisible = ref(false)
 }
 .nav-header {
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
   .search {
     width: 100%;

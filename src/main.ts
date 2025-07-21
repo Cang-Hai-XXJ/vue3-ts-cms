@@ -4,7 +4,6 @@ import router from './router'
 import store from './store'
 import 'normalize.css'
 import './assets/css/index.less'
-
 import ElementPLus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 // 引入中文
@@ -12,6 +11,7 @@ import 'element-plus/dist/index.css'
 // import MYRequest from './service'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { setupStore } from './store'
+import dayjs from 'dayjs'
 
 // MYRequest.post({
 //   url: 'login',
@@ -39,7 +39,7 @@ import { setupStore } from './store'
 //   }
 // })
 const app = createApp(App)
-
+app.config.globalProperties.$dayjs = dayjs
 setupStore()
 
 app.use(router)
